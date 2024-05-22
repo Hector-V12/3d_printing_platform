@@ -13,7 +13,7 @@ export interface LoginProps {
   identifiant: string;
   motDePasse: string;
 }
-export default function Login() {
+export default function Login(props: LoginProps) {
   return (
     <div className="from-linear2 to-linear1 flex h-screen w-full flex-col bg-gradient-to-t">
       <div className="h-1/7 items-centee m-10 mr-20 flex w-full flex-row">
