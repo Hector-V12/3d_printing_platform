@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
@@ -15,6 +17,7 @@ import boxIcon from "../../public/boxIcon.svg";
 import personIcon from "../../public/personIcon.svg";
 import whiteCartIcon from "../../public/cartWhiteIcon.svg";
 import uploadIcon from "../../public/uploadIcon.svg";
+import formatErrorIcon from "../../public/formatErrorIcon.svg";
 
 export interface CommandManagementDesktopProps {
   profileImage: StaticImageData | undefined;
@@ -23,6 +26,8 @@ export interface CommandManagementDesktopProps {
 export default function CommandManagementDesktop(
   props: CommandManagementDesktopProps,
 ) {
+  const [formatError, setFormatError] = useState(true);
+
   return (
     <div className="from-linear2 to-linear1 flex h-screen w-full flex-col bg-gradient-to-t">
       <div className="bg-whiteBackground flex  flex-row items-center">
@@ -140,25 +145,46 @@ export default function CommandManagementDesktop(
             </div>
           </div>
         </div>
-        <div className="bg-whiteBackground mb-24 ml-24 mr-24 mt-24 flex flex h-full w-2/3 flex-col flex-col items-center justify-center rounded-xl">
-          <button className="flex h-5/6 flex-row items-center space-x-2">
-            <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
-              <Image alt="uploadIcon" src={uploadIcon} />
-              <div className="text-4xl font-extrabold ">
-                Importer un fichier 3d
+
+        {formatError ? (
+          <div className="bg-whiteBackground mb-24 ml-24 mr-24 mt-24 flex flex h-full w-2/3 flex-col flex-col items-center justify-center rounded-xl">
+            <button className="mb-5  flex flex-row items-center space-x-8">
+              <div className="text-5xl font-extrabold text-red-900 ">
+                Format Incorrect!
               </div>
+
+              <Image alt="3dIcon" src={formatErrorIcon} width={50} />
+            </button>
+            <div className="center-items w-1/5">
+              <Link
+                className="text-fontBlack center-items flex justify-center text-2xl font-extrabold underline underline-offset-2"
+                href=""
+              >
+                Besoin d'aide avec la modélisation?
+              </Link>
             </div>
-            <Image alt="3dIcon" src={icon3d} width={95} />
-          </button>
-          <div className="center-items w-1/5 ">
-            <Link
-              className="text-fontBlack center-items flex justify-center text-xl font-extrabold underline underline-offset-2"
-              href=""
-            >
-              Besoin d'aide avec la modélisation?
-            </Link>
           </div>
-        </div>
+        ) : (
+          <div className="bg-whiteBackground mb-24 ml-24 mr-24 mt-24 flex flex h-full w-2/3 flex-col flex-col items-center justify-center rounded-xl">
+            <button className="flex h-5/6 flex-row items-center space-x-2">
+              <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
+                <Image alt="uploadIcon" src={uploadIcon} />
+                <div className="text-4xl font-extrabold ">
+                  Importer un fichier 3d
+                </div>
+              </div>
+              <Image alt="3dIcon" src={icon3d} width={95} />
+            </button>
+            <div className="center-items w-1/5 ">
+              <Link
+                className="text-fontBlack center-items flex justify-center text-xl font-extrabold underline underline-offset-2"
+                href=""
+              >
+                Besoin d'aide avec la modélisation?
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
