@@ -3,21 +3,16 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import Footer from "../_components/footer";
+import Header from "../_components/header";
 
-import poweredIcon from "../../public/poweredIcon.svg";
-import bellRedIcon from "../../public/bellRedIcon.svg";
-import cartRedIcon from "../../public/cartRedIcon.svg";
-import userRedIcon from "../../public/userRedIcon.svg";
-import frenchIcon from "../../public/frenchIcon.svg";
-import englishIcon from "../../public/englishIcon.svg";
-import spanishIcon from "../../public/spanishIcon.svg";
-import chineseIcon from "../../public/chineseIcon.svg";
 import icon3d from "../../public/icon3d.svg";
 import boxIcon from "../../public/boxIcon.svg";
 import personIcon from "../../public/personIcon.svg";
 import whiteCartIcon from "../../public/cartWhiteIcon.svg";
 import uploadIcon from "../../public/uploadIcon.svg";
 import formatErrorIcon from "../../public/formatErrorIcon.svg";
+import Notifications from "../_components/notifications";
 
 export interface CommandManagementDesktopProps {
   profileImage: StaticImageData | undefined;
@@ -30,24 +25,7 @@ export default function CommandManagementDesktop(
 
   return (
     <div className="from-linear2 to-linear1 flex h-screen w-full flex-col bg-gradient-to-t">
-      <div className="bg-whiteBackground flex  flex-row items-center">
-        <div className="w-4/6">
-          <Image alt={poweredIcon} src={poweredIcon} width={50} />
-        </div>
-        <div className="mr-8 flex  w-3/6 flex-row-reverse">
-          <div className="flex space-x-12 ">
-            <button>
-              <Image alt="bellRedIcon" src={bellRedIcon} width={35} />
-            </button>
-            <button>
-              <Image alt="cartRedIcon" src={cartRedIcon} width={35} />
-            </button>
-            <button>
-              <Image alt="userRedIcon" src={userRedIcon} width={35} />
-            </button>
-          </div>
-        </div>
-      </div>
+      <Header />
       <div className="mt-10 flex w-full flex-row items-center">
         <div className="flex w-1/2 flex-col">
           <div className=" mb-10 ml-10 mr-10  flex  w-full flex-row justify-center">
@@ -128,22 +106,7 @@ export default function CommandManagementDesktop(
               </div>
             </div>
           </div>
-          <div className="ml-5 flex h-1/6 flex-row ">
-            <div className="flex h-full flex-row space-x-4">
-              <button>
-                <Image alt="frenchIcon" src={frenchIcon} />
-              </button>
-              <button>
-                <Image alt="englishIcon" src={englishIcon} />
-              </button>
-              <button>
-                <Image alt="spanishIcon" src={spanishIcon} />
-              </button>
-              <button>
-                <Image alt="chineseIcon" src={chineseIcon} />
-              </button>
-            </div>
-          </div>
+          <Footer />
         </div>
 
         {formatError ? (
