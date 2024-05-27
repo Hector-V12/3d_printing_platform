@@ -66,6 +66,15 @@ model User {
     posts         Post[]
 }
 
+
+model Order {
+    id String  @id @default(cuid())
+    title String
+    amount Int
+    Remarque String?
+    File String?
+}
+
 model VerificationToken {
     identifier String
     token      String   @unique
