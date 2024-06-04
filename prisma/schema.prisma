@@ -68,11 +68,12 @@ model User {
 
 
 model Order {
-    id String  @id @default(cuid())
-    title String
-    amount Int
-    Remarque String?
-    File String?
+  id                  Int      @id @default(autoincrement())
+  title               String
+  quantity            Int
+  printingTechnology  String
+  materialChoice      String
+  remark              String
 }
 
 model VerificationToken {
