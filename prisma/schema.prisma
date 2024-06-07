@@ -71,8 +71,9 @@ model Order {
     id String  @id @default(cuid())
     title String
     amount Int
+    printingTechnology String?
+    materialChoice String?
     Remarque String?
-    File String?
 }
 
 model VerificationToken {
