@@ -17,6 +17,8 @@ export default {
         fontWhite: "#D9D9D9",
         linear1: "#351E1E",
         linear2: "#151515",
+        almostBlackGreen: "#001f1f",
+        darkGreen: "#064e3b",
       },
     },
   },
