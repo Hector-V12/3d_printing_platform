@@ -1,0 +1,7 @@
+{
+  "userName": "identifiant",
+  "password": "Mot de passe",
+  "connexion": "connexion",
+  "greeting": "Bonjour",
+  "footerText": "Ceci est le pied de page."
+}

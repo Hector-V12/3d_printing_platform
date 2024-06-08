@@ -15,11 +15,12 @@ import greenTimeIcon from "~/assets/greenTimeIcon.svg";
 
 import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
 import { useLanguage } from "../_components/languageContext/languageContext";
+import { useRouter } from "next/navigation";
 
 export default function ProfileDesktop() {
   const { darkMode } = useDarkMode();
   const { translations } = useLanguage();
-
+  const router = useRouter();
   //<div>{translations.greeting}</div>
   return (
     <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">

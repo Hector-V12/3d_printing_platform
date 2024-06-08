@@ -10,12 +10,17 @@ import bellGreenIcon from "~/assets/greenBell.png";
 import cartGreenIcon from "~/assets/greenCartIcon.svg";
 import userGreenIcon from "~/assets/greenPersonIcon.svg";
 
-import DarkModeToggle from "./darkModeToggle";
+import DarkModeToggle from "./darkModeContext/darkModeToggle";
 import Link from "next/link";
-import { useDarkMode } from "./darkModeContext";
+import { useDarkMode } from "./darkModeContext/darkModeContext";
+import { useLanguage } from "./languageContext/languageContext";
+import { useAuth } from "./authContext/authContext";
 
 export default function Header() {
   const { darkMode } = useDarkMode();
+  const { translations } = useLanguage();
+  const { user, login, logout } = useAuth();
+
   const [notificationsActive, setNotificationsActive] = useState(false);
 
   const onNotificationsClick = () => {
@@ -24,7 +29,7 @@ export default function Header() {
 
   return (
     <div>
-      <div className="flex flex-row  items-center bg-whiteBackground p-2 dark:bg-slate-900">
+      <div className="flex flex-row  items-center border-green-400 bg-whiteBackground p-2 dark:border-b dark:bg-slate-900">
         <div className="flex w-4/6 space-x-8">
           <Image alt={poweredIcon} src={poweredIcon} width={50} />
           <DarkModeToggle />
@@ -52,6 +57,8 @@ export default function Header() {
                 width={35}
               />
             </Link>
+
+            <button onClick={logout}>Logout</button>
           </div>
         </div>
       </div>

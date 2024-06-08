@@ -1,5 +1,3 @@
-// src/app/api/auth/login/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -7,19 +5,6 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-/**
- * @swagger
- * /api/auth/login:
- *   post:
- *     description: Login to the application
- *     responses:
- *       200:
- *         description: Login succesful
- *       400:
- *        description: Email and password are required
- *       401:
- *       description: Invalid email or password
- */
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
 
@@ -39,6 +24,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // If login is successful, return user information along with the token
+  const userData = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    surname: user.surname,
+    // Add other user properties as needed
+  };
+
   const token = jwt.sign(
     { id: user.id, email: user.email },
     process.env.JWT_SECRET as string,
@@ -46,7 +40,7 @@ export async function POST(req: NextRequest) {
   );
 
   return NextResponse.json(
-    { message: "Login successful", token },
+    { message: "Login successful", token, user: userData },
     { status: 200 },
   );
 }
