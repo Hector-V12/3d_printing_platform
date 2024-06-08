@@ -1,19 +1,61 @@
 "use client";
 
-import Image from "next/image";
-import illustrationLogin from "../../assets/IllustrationLogin.png";
-import logoGarage from "../../assets/LogoGarage.png";
-import franceFlag from "../../assets/france.png";
-import englandFlag from "../../assets/angleterre.png";
-import chinaFlag from "../../assets/chine.png";
-import spainFlag from "../../assets/espagne.png";
-import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "../_components/languageContext/languageContext";
-import Footer from "../_components/footer";
+import { useAuth } from "../_components/authContext/authContext";
+import axios from "axios";
 
 export default function LoginPage() {
-  const { darkMode } = useDarkMode();
+  const router = useRouter();
   const { translations } = useLanguage();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+
+  const handleLogin = async () => {
+    try {
+      const token = await loginUser(email, password);
+      // Save token to local storage or cookie
+
+      const userData = await fetchUserData(token);
+      if (userData && userData.id) {
+        localStorage.setItem("userId", userData.id.toString()); // Store user ID in local storage
+      }
+
+      login(userData, userData.id, token);
+
+      // Redirect to dashboard or desired page
+      router.push("/ProfileDesktop");
+    } catch (error) {
+      console.log(error);
+      setError("Failed to login. Please check your credentials.");
+    }
+  };
+
+  const loginUser = async (email: string, password: string) => {
+    try {
+      const response = await axios.post("/api/auth/login", { email, password });
+      if (!response.data.token) {
+        throw new Error("Token not found");
+      }
+      return response.data.token;
+    } catch (error) {
+      throw new Error("Login failed");
+    }
+  };
+
+  const fetchUserData = async (token: string) => {
+    try {
+      const response = await axios.get("/api/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch user data");
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-end bg-gradient-to-r from-gray-800 to-black p-10">
@@ -27,15 +69,17 @@ export default function LoginPage() {
             <div className="mb-4">
               <label
                 className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="username"
+                htmlFor="email"
               >
-                <div>{translations.userName}</div>
+                {translations.userName}
               </label>
               <input
                 className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                id="username"
+                id="email"
                 type="text"
                 placeholder="Insérez votre identifiant"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-6">
@@ -43,37 +87,29 @@ export default function LoginPage() {
                 className="mb-2 block text-sm font-bold text-gray-700"
                 htmlFor="password"
               >
-                <div>{translations.password}</div>
+                {translations.password}
               </label>
               <input
                 className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
                 id="password"
                 type="password"
                 placeholder="Insérez votre mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="flex items-center justify-between">
               <button
                 className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
                 type="button"
+                onClick={handleLogin}
               >
-                <div>{translations.connexion}</div>
+                {translations.connexion}
               </button>
             </div>
+            {error && <div className="mt-4 text-sm text-red-500">{error}</div>}
           </form>
-          <div className="mt-6 flex justify-center">
-            <Image
-              src={illustrationLogin}
-              alt="Illustration"
-              width={300}
-              height={150}
-            />
-          </div>
-          <div className="mt-6 flex justify-center">
-            <Image src={logoGarage} alt="Garage ISEP" width={100} height={50} />
-          </div>
         </div>
-        <Footer />
       </div>
     </div>
   );

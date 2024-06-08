@@ -13,9 +13,14 @@ import userGreenIcon from "~/assets/greenPersonIcon.svg";
 import DarkModeToggle from "./darkModeContext/darkModeToggle";
 import Link from "next/link";
 import { useDarkMode } from "./darkModeContext/darkModeContext";
+import { useLanguage } from "./languageContext/languageContext";
+import { useAuth } from "./authContext/authContext";
 
 export default function Header() {
   const { darkMode } = useDarkMode();
+  const { translations } = useLanguage();
+  const { user, login, logout } = useAuth();
+
   const [notificationsActive, setNotificationsActive] = useState(false);
 
   const onNotificationsClick = () => {
@@ -52,6 +57,8 @@ export default function Header() {
                 width={35}
               />
             </Link>
+
+            <button onClick={logout}>Logout</button>
           </div>
         </div>
       </div>

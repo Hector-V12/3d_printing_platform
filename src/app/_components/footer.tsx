@@ -25,7 +25,6 @@ export default function Footer() {
           <Image alt="chineseIcon" src={chineseIcon} />
         </button>
       </div>
-      <div>{translations.footerText}</div>
     </div>
   );
 }

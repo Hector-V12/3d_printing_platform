@@ -21,7 +21,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
 ) {
-  return authenticate(req, async (req) => {
+  return authenticate(req, async (req: any) => {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(params.id) },
     });
