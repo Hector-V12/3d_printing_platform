@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 
-import frenchIcon from "../../public/frenchIcon.svg";
-import englishIcon from "../../public/englishIcon.svg";
-import spanishIcon from "../../public/spanishIcon.svg";
-import chineseIcon from "../../public/chineseIcon.svg";
+import frenchIcon from "../../assets/france.png";
+import englishIcon from "../../assets/angleterre.png";
+import spanishIcon from "../../assets/espagne.png";
+import chineseIcon from "../../assets/chine.png";
 
 export default function Footer() {
   return (
