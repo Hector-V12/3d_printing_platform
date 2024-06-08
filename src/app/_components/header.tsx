@@ -6,6 +6,8 @@ import poweredIcon from "../../public/poweredIcon.svg";
 import bellRedIcon from "../../public/bellRedIcon.svg";
 import cartRedIcon from "../../public/cartRedIcon.svg";
 import userRedIcon from "../../public/userRedIcon.svg";
+import DarkModeToggle from "./darkModeToggle";
+import Link from "next/link";
 
 export default function Header() {
   const [notificationsActive, setNotificationsActive] = useState(false);
@@ -16,21 +18,22 @@ export default function Header() {
 
   return (
     <div>
-      <div className="bg-whiteBackground flex  flex-row items-center">
-        <div className="w-4/6">
+      <div className="flex flex-row  items-center bg-whiteBackground p-2">
+        <div className="flex w-4/6 space-x-8">
           <Image alt={poweredIcon} src={poweredIcon} width={50} />
+          <DarkModeToggle />
         </div>
         <div className="mr-8 flex  w-3/6 flex-row-reverse">
           <div className="flex space-x-12 ">
             <button onClick={onNotificationsClick}>
               <Image alt="bellRedIcon" src={bellRedIcon} width={35} />
             </button>
-            <button>
+            <Link href="/PaymentDesktop">
               <Image alt="cartRedIcon" src={cartRedIcon} width={35} />
-            </button>
-            <button>
+            </Link>
+            <Link href="/ProfileDesktop">
               <Image alt="userRedIcon" src={userRedIcon} width={35} />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
