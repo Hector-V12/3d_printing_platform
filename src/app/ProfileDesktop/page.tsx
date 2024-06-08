@@ -13,12 +13,15 @@ import poweredIcon from "~/assets/poweredWholeIcon.svg";
 import greenProfileIcon from "~/assets/greenProfileIcon.svg";
 import greenTimeIcon from "~/assets/greenTimeIcon.svg";
 
-import { useDarkMode } from "../_components/darkModeContext";
+import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
+import { useLanguage } from "../_components/languageContext/languageContext";
 
 export default function ProfileDesktop() {
   const { darkMode } = useDarkMode();
+  const { translations } = useLanguage();
+  //<div>{translations.greeting}</div>
   return (
-    <div className=" dark:to-almostBlackGreen flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900">
+    <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
       <div className="flex h-full items-center justify-center">
         <div className="flex w-full max-w-6xl rounded-2xl border-green-400 bg-whiteBackground p-10 dark:border dark:bg-gray-900 dark:text-green-400">
