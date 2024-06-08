@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
+"use client";
 
-export default function DarkModeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+import React from "react";
+import { useDarkMode } from "./darkModeContext";
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (isDarkMode) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, [isDarkMode]);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+const DarkModeToggle = () => {
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <button
       onClick={toggleDarkMode}
-      className="rounded bg-gray-200 p-2 dark:bg-gray-800"
+      className="rounded bg-gray-200 p-2 dark:bg-green-400"
     >
-      {isDarkMode ? "Light Mode" : "Dark Mode"}
+      {darkMode ? "Light Mode" : "Dark Mode"}
     </button>
   );
-}
+};
+
+export default DarkModeToggle;

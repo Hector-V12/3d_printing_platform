@@ -5,11 +5,8 @@ import franceFlag from "../../assets/france.png";
 import englandFlag from "../../assets/angleterre.png";
 import chinaFlag from "../../assets/chine.png";
 import spainFlag from "../../assets/espagne.png";
-import { auth } from "lib/auth";
 
 export default async function LoginPage() {
-  const session = await auth();
-
   return (
     <div className="flex min-h-screen items-center justify-end bg-gradient-to-r from-gray-800 to-black p-10">
       <div className="flex flex-col items-center space-y-6">

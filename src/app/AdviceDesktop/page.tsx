@@ -16,8 +16,8 @@ export default function AdviceDesktop() {
     <div className="flex h-screen w-full flex-col  bg-gradient-to-t from-linear2 to-linear1">
       <Header />
       <div className="flex h-full items-center justify-center">
-        <div className="flex h-3/4 w-3/6 max-w-6xl  rounded-2xl bg-whiteBackground p-16">
-          <div className="flex flex-col items-center space-y-8 font-extrabold">
+        <div className="flex h-3/4 w-3/6 max-w-6xl  rounded-2xl bg-whiteBackground  p-16 dark:bg-slate-900">
+          <div className="flex flex-col items-center space-y-8 font-extrabold dark:text-green-400">
             <div>Conseils de pratique pour la modelisation 3D</div>
             <div className="font-normal">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
