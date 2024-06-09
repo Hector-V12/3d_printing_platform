@@ -18,6 +18,8 @@ import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
 import { useLanguage } from "../_components/languageContext/languageContext";
 import { useAuth } from "../_components/authContext/authContext";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Order {
   id?: number;
@@ -35,6 +37,7 @@ export default function ProfileDesktop() {
   const { darkMode } = useDarkMode();
   const { translations } = useLanguage();
   const { user, logout } = useAuth();
+  const router = useRouter();
 
   const [inProgressOrders, setInProgressOrders] = useState<Order[]>([]);
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
@@ -66,25 +69,18 @@ export default function ProfileDesktop() {
     }
   };
 
-  const orderAgain = async (order: Order) => {
+  const handleOrderAgain = async (orderId: number) => {
     try {
-      const newOrder = { ...order };
-
-      delete newOrder.id;
-      delete newOrder.orderDate;
-      delete newOrder.status;
-
-      const token = localStorage.getItem("userToken");
-      if (!token) throw new Error("No token found");
-      const response = await axios.post("/api/upload", newOrder, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await axios.post("/api/user/orders/orderAgain", {
+        orderId,
       });
-      console.log("Order created successfully:", response.data);
-
-      const updatedInProgressOrders = await fetchInProgressOrders();
-      setInProgressOrders(updatedInProgressOrders);
+      if (response.status === 200) {
+        router.push(`/CommandManagementDesktop?orderId=${orderId}`);
+      } else {
+        console.error("Failed to order again");
+      }
     } catch (error) {
-      console.error("Failed to create order:", error);
+      console.error("Error ordering again:", error);
     }
   };
 
@@ -216,12 +212,6 @@ export default function ProfileDesktop() {
                               <div>{order.commandTitle}</div>
                             </div>
                             <div>Quantity: {order.quantity}</div>
-                            <button
-                              className="rounded-lg bg-white p-2"
-                              onClick={() => orderAgain(order)}
-                            >
-                              Command Again
-                            </button>
                           </div>
                         ))
                       : false}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import Footer from "../_components/footer";
@@ -24,6 +24,18 @@ export interface Command {
   Comment: string;
 }
 
+interface Order {
+  id?: number;
+  commandTitle: string;
+  quantity: number;
+  usedSoftware: string;
+  materialChoice: string;
+  comment: string;
+  orderDate?: Date;
+  userId: number;
+  status?: boolean;
+}
+
 export default function CommandManagementDesktop() {
   const [formatError, setFormatError] = useState(false);
   const [commandTitle, setCommandTitle] = useState("");
@@ -37,6 +49,45 @@ export default function CommandManagementDesktop() {
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
+
+  const [doneOrders, setDoneOrders] = useState<Order[]>([]);
+
+  const handleOrderAgainClick = (order: Order) => {
+    // Set form fields with the values from the selected order
+    setCommandTitle(order.commandTitle);
+    setQuantity(order.quantity.toString());
+    setUsedSoftware(order.usedSoftware);
+    setMaterialChoice(order.materialChoice);
+    setComment(order.comment);
+  };
+
+  const fetchDoneOrders = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No token found");
+      const response = await axios.get("/api/user/orders/done", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch orders");
+    }
+  };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const doneOrders = await fetchDoneOrders();
+        setDoneOrders(doneOrders);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -210,25 +261,46 @@ export default function CommandManagementDesktop() {
               </div>
             </div>
           ) : (
-            <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
-              <button className="flex h-5/6 flex-row items-center space-x-2">
-                <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
-                  <Image alt="uploadIcon" src={uploadIcon} />
-                  <input type="file" />
-                  <button className="text-4xl font-extrabold ">
-                    {uploadStatus && <p>{uploadStatus}</p>}
-                    Importer un fichier 3d
-                  </button>
+            <div className="flex flex-col items-center">
+              <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
+                <button className="flex h-5/6 flex-row items-center space-x-2">
+                  <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
+                    <Image alt="uploadIcon" src={uploadIcon} />
+                    <input type="file" />
+                    <button className="text-4xl font-extrabold ">
+                      {uploadStatus && <p>{uploadStatus}</p>}
+                      Importer un fichier 3d
+                    </button>
+                  </div>
+                  <Image alt="3dIcon" src={icon3d} width={95} />
+                </button>
+                <div className="center-items w-1/5 ">
+                  <Link
+                    className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
+                    href="/AdviceDesktop"
+                  >
+                    Besoin d'aide avec la modélisation?
+                  </Link>
                 </div>
-                <Image alt="3dIcon" src={icon3d} width={95} />
-              </button>
-              <div className="center-items w-1/5 ">
-                <Link
-                  className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
-                  href="/AdviceDesktop"
-                >
-                  Besoin d'aide avec la modélisation?
-                </Link>
+              </div>
+              <div className="border-l border-black p-2 text-white dark:border-green-400">
+                {doneOrders?.length
+                  ? doneOrders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="flex items-center space-x-8"
+                      >
+                        <div className="flex space-x-2">
+                          <div> Order:</div>
+                          <div>{order.commandTitle}</div>
+                        </div>
+                        <div>Quantity: {order.quantity}</div>
+                        <button onClick={() => handleOrderAgainClick(order)}>
+                          Order Again
+                        </button>
+                      </div>
+                    ))
+                  : false}
               </div>
             </div>
           )}

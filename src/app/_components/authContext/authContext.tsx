@@ -7,6 +7,7 @@ interface UserData {
   name: string;
   surname: string;
   email: string;
+  isAdmin: boolean;
   phoneNumber: string;
   orders: Order[];
 }
@@ -20,7 +21,8 @@ export interface Order {
   comment: string;
   orderDate: Date;
   userId: number;
-  user: UserData[];
+  user: UserData;
+  status: boolean;
 }
 
 interface AuthContextType {

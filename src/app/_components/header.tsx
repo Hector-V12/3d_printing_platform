@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
+
 import Image from "next/image";
 import Notifications from "./notifications";
 
@@ -20,6 +19,15 @@ import { useLanguage } from "./languageContext/languageContext";
 import { useAuth } from "./authContext/authContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+
+
+export interface Notifications {
+  id?: number;
+  notificationsTitle: string;
+  content: string;
+  notificationDate: Date;
+  userId: number;
+}
 
 interface Model {
   id: string;
