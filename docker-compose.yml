@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: 3dprint_db
+    restart: always
+    image: postgres:13
+    networks:
+      - app-network
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  3dprint:
+    image: 3d_printing_platform:latest
+    container_name: 3dprint
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - traefik
+      - app-network
+    expose:
+      - 3000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fablab-secure.rule=Host(`fablab.garageisep.com`)
+      - traefik.http.routers.fablab-secure.entrypoints=websecure
+      - traefik.http.routers.fablab-secure.tls.certresolver=myhttpchallenge
+      # https redirection
+      - traefik.http.middlewares.redirect.redirectscheme.scheme=https
+      - traefik.http.routers.fablab.rule=Host(`fablab.garageisep.com`)
+      - traefik.http.routers.fablab.entrypoints=web
+      - traefik.http.routers.fablab.middlewares=redirect
+
+networks:
+  traefik:
+    external: true
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
