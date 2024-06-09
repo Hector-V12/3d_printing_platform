@@ -39,3 +39,12 @@ model Order {
   user            User     @relation(fields: [userId], references: [id])
   status          Boolean @default(false)
 }
+
+model Notifications {
+   id              Int      @id @default(autoincrement())
+   notificationTitle String
+   content String
+   notificationDate DateTime@default(now())
+   userId            Int?      // Foreign key referencing the User model
+  adminId           Int?      // Foreign key referencing the Admin model
+}
