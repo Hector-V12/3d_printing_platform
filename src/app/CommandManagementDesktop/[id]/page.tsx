@@ -1,0 +1,311 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import Footer from "../../_components/footer";
+import Header from "../../_components/header";
+
+import icon3d from "~/assets/icon3d.svg";
+import boxIcon from "~/assets/boxIcon.svg";
+import personIcon from "~/assets/personIcon.svg";
+import whiteCartIcon from "~/assets/cartWhiteIcon.svg";
+import uploadIcon from "~/assets/uploadIcon.svg";
+import formatErrorIcon from "~/assets/formatErrorIcon.svg";
+import Notifications from "~/app/_components/notifications";
+import { prisma } from "../../../../lib/prisma";
+import axios from "axios";
+
+export interface Command {
+  CommandTitle: string;
+  Quantity: string | number;
+  UsedSoftware: string;
+  MaterialChoice: string;
+  Comment: string;
+}
+
+interface Order {
+  id?: number;
+  commandTitle: string;
+  quantity: number;
+  usedSoftware: string;
+  materialChoice: string;
+  comment: string;
+  orderDate?: Date;
+  userId: number;
+  status?: boolean;
+}
+
+export default function CommandManagementDesktop() {
+  const [formatError, setFormatError] = useState(false);
+  const [commandTitle, setCommandTitle] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [usedSoftware, setUsedSoftware] = useState("");
+  const [materialChoice, setMaterialChoice] = useState("");
+  const [comment, setComment] = useState("");
+  const [commands, setCommands] = useState<Command[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
+
+  const [doneOrders, setDoneOrders] = useState<Order[]>([]);
+
+  const handleOrderAgainClick = (order: Order) => {
+    // Set form fields with the values from the selected order
+    setCommandTitle(order.commandTitle);
+    setQuantity(order.quantity.toString());
+    setUsedSoftware(order.usedSoftware);
+    setMaterialChoice(order.materialChoice);
+    setComment(order.comment);
+  };
+
+  const fetchDoneOrders = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No token found");
+      const response = await axios.get("/api/user/orders/done", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch orders");
+    }
+  };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const doneOrders = await fetchDoneOrders();
+        setDoneOrders(doneOrders);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) {
+        throw new Error("User token not found");
+      }
+
+      const response = await axios.post(
+        "/api/upload",
+        {
+          commandTitle,
+          quantity: parseInt(quantity),
+          usedSoftware,
+          materialChoice,
+          comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log("Order created successfully:", response.data);
+      // Optionally, you can redirect the user to another page or show a success message
+    } catch (error) {
+      console.error("Error creating order:", error);
+      setError("Failed to create order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
+      <Header />
+      <form onSubmit={handleSubmit}>
+        <div className="mt-10 flex w-full flex-row items-center">
+          <div className="flex w-1/2 flex-col">
+            <div className=" mb-10 ml-10 mr-10  flex  w-full flex-row justify-center">
+              <div className="mt-8 flex w-auto flex-col rounded-xl bg-whiteBackground pb-10 pl-20 pr-20 pt-10">
+                <div className="mb-5 flex items-center justify-center font-extrabold text-fontBlack">
+                  Importer un fichier
+                  <Image className="ml-2" alt="3dIcon" src={icon3d} />
+                </div>
+
+                <div className="mb-3 flex flex-col">
+                  <div className="text-xl font-extrabold text-fontBlack">
+                    Titre de la commande
+                  </div>
+                  <div className="border-1 flex flex-row border-b border-fontBlack p-1">
+                    <Image alt="boxIcon" src={boxIcon} width={25} />
+                    <input
+                      className="border-0 bg-whiteBackground text-fontBlack outline-none"
+                      placeholder="Dites nous en plus"
+                      name="commandTitle"
+                      value={commandTitle}
+                      onChange={(e) => setCommandTitle(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="text-xl font-extrabold text-fontBlack">
+                    Quantité
+                  </div>
+                  <div className="border-1 flex flex-row border-b border-fontBlack p-1">
+                    <Image alt="boxIcon" src={boxIcon} width={25} />
+                    <input
+                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      placeholder="0"
+                      name="Quantity"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="text-xl font-extrabold text-fontBlack">
+                    Logiciel Utilisé
+                  </div>
+                  <div className="border-1 flex flex-row space-x-2 border-b border-fontBlack p-1">
+                    <Image alt="boxIcon" src={boxIcon} width={25} />
+                    <input
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
+                      placeholder="Logiciel utilisé"
+                      name="UsedSoftware"
+                      value={usedSoftware}
+                      onChange={(e) => setUsedSoftware(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="text-xl font-extrabold text-fontBlack">
+                    Choix du materiaux
+                  </div>
+                  <div className="border-1 flex flex-row space-x-2 border-b border-fontBlack p-1">
+                    <Image alt="boxIcon" src={boxIcon} width={25} />
+                    <select
+                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      name="MaterialChoice"
+                      value={materialChoice}
+                      onChange={(e) => setMaterialChoice(e.target.value)}
+                    >
+                      <option>Red</option>
+                      <option>Blue</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="text-xl font-extrabold text-fontBlack">
+                    Remarque
+                  </div>
+                  <div className="border-1 flex flex-row border-b border-fontBlack p-1">
+                    <Image alt="personIcon" src={personIcon} width={25} />
+                    <input
+                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      placeholder="remarque"
+                      name="remarque"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className=" mb-3 flex  flex-row items-center space-x-12 bg-fontBlack p-2"
+                >
+                  <Image alt="whiteCartIcon" src={whiteCartIcon} />
+                  <div className="font-extrabold text-fontWhite">
+                    Ajouter au panier
+                  </div>
+                </button>
+
+                <div>
+                  <Link
+                    className="font-bold text-fontBlack underline underline-offset-2"
+                    href="/AdviceDesktop"
+                  >
+                    Besoin d'aide avec la modélisation?
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <Footer />
+          </div>
+
+          {formatError ? (
+            <div className="mb-24 ml-24 mr-24 mt-24 flex h-full w-2/3 flex-col items-center justify-center rounded-xl bg-whiteBackground">
+              <button className="mb-5  flex flex-row items-center space-x-8">
+                <div className="text-5xl font-extrabold text-red-900 ">
+                  Format Incorrect!
+                </div>
+
+                <Image alt="3dIcon" src={formatErrorIcon} width={50} />
+              </button>
+              <div className="center-items w-1/5">
+                <Link
+                  className="center-items flex justify-center text-2xl font-extrabold text-fontBlack underline underline-offset-2"
+                  href=""
+                >
+                  Besoin d'aide avec la modélisation?
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
+                <button className="flex h-5/6 flex-row items-center space-x-2">
+                  <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
+                    <Image alt="uploadIcon" src={uploadIcon} />
+                    <input type="file" />
+                    <button className="text-4xl font-extrabold ">
+                      {uploadStatus && <p>{uploadStatus}</p>}
+                      Importer un fichier 3d
+                    </button>
+                  </div>
+                  <Image alt="3dIcon" src={icon3d} width={95} />
+                </button>
+                <div className="center-items w-1/5 ">
+                  <Link
+                    className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
+                    href="/AdviceDesktop"
+                  >
+                    Besoin d'aide avec la modélisation?
+                  </Link>
+                </div>
+              </div>
+              <div className="border-l border-black p-2 text-white dark:border-green-400">
+                {doneOrders?.length
+                  ? doneOrders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="flex items-center space-x-8"
+                      >
+                        <div className="flex space-x-2">
+                          <div> Order:</div>
+                          <div>{order.commandTitle}</div>
+                        </div>
+                        <div>Quantity: {order.quantity}</div>
+                        <button onClick={() => handleOrderAgainClick(order)}>
+                          Order Again
+                        </button>
+                      </div>
+                    ))
+                  : false}
+              </div>
+            </div>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}

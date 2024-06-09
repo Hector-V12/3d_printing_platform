@@ -219,6 +219,12 @@ export default function ProfileDesktop() {
                               <div>{order.commandTitle}</div>
                             </div>
                             <div>Quantity: {order.quantity}</div>
+                            <Link
+                              className="rounded-lg bg-white p-2"
+                              href={`/CommandManagementDesktop/${order.id}`}
+                            >
+                              Order Again
+                            </Link>
                           </div>
                         ))
                       : false}

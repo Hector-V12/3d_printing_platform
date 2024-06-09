@@ -12,7 +12,7 @@ import Image from "next/image";
 import rightArrow from "~/assets/arrowRightIcon.svg";
 import downArrow from "~/assets/downArrow.svg";
 
-export default function AdminPanel() {
+export default function AdminPannel() {
   const router = useRouter();
   const [inProgressOrders, setInProgressOrders] = useState<Order[]>([]);
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
