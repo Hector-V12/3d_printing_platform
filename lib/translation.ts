@@ -4,6 +4,7 @@ export interface Translation {
   connexion: string;
   greeting: string;
   footerText: string;
+  mailIsep: string;
 }
 
 export type Language = "en" | "fr" | "es" | "zh";

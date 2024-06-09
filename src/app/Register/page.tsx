@@ -62,7 +62,7 @@ export default function RegisterPage() {
               className="mb-2 block text-sm font-bold text-gray-700"
               htmlFor="email"
             >
-              {translations.}
+              {translations.mailIsep}
             </label>
             <input
               className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
