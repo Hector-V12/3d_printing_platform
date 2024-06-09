@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import authenticate from "../../../../middleware/auth";
+import { AuthenticatedNextRequest } from "~/interface/page";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +19,7 @@ const prisma = new PrismaClient();
  */
 
 export async function GET(req: NextRequest) {
-  return authenticate(req, async (req) => {
+  return authenticate(req, async (req: AuthenticatedNextRequest) => {
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
     });

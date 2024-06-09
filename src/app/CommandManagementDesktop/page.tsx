@@ -45,7 +45,7 @@ export default function CommandManagementDesktop() {
   const [comment, setComment] = useState("");
   const [commands, setCommands] = useState<Command[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -92,7 +92,7 @@ export default function CommandManagementDesktop() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError("");
 
     try {
       const token = localStorage.getItem("userToken");
@@ -286,20 +286,20 @@ export default function CommandManagementDesktop() {
               <div className="border-l border-black p-2 text-white dark:border-green-400">
                 {doneOrders?.length
                   ? doneOrders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="flex items-center space-x-8"
-                      >
-                        <div className="flex space-x-2">
-                          <div> Order:</div>
-                          <div>{order.commandTitle}</div>
-                        </div>
-                        <div>Quantity: {order.quantity}</div>
-                        <button onClick={() => handleOrderAgainClick(order)}>
-                          Order Again
-                        </button>
+                    <div
+                      key={order.id}
+                      className="flex items-center space-x-8"
+                    >
+                      <div className="flex space-x-2">
+                        <div> Order:</div>
+                        <div>{order.commandTitle}</div>
                       </div>
-                    ))
+                      <div>Quantity: {order.quantity}</div>
+                      <button onClick={() => handleOrderAgainClick(order)}>
+                        Order Again
+                      </button>
+                    </div>
+                  ))
                   : false}
               </div>
             </div>

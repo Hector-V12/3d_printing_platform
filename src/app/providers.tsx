@@ -4,7 +4,11 @@ import { AuthProvider } from "./_components/authContext/authContext";
 import { DarkModeProvider } from "./_components/darkModeContext/darkModeContext";
 import { LanguageProvider } from "./_components/languageContext/languageContext";
 
-export function Providers({ children }: any) {
+interface ProvidersProps {
+  children: React.ReactNode;
+}
+
+export function Providers({ children }: ProvidersProps) {
   return (
     <AuthProvider>
       <LanguageProvider>

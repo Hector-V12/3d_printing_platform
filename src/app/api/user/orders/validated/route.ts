@@ -15,9 +15,16 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(validatedOrders, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error fetching validated orders", error: error.message },
-      { status: 500 },
-    );
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { message: "Error fetching validated orders", error: error.message },
+        { status: 500 },
+      );
+    } else {
+      return NextResponse.json(
+        { message: "Error fetching validated orders", error: String(error) },
+        { status: 500 },
+      );
+    }
   }
 }
