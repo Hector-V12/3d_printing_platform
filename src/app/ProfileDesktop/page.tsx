@@ -30,7 +30,7 @@ interface Order {
   comment: string;
   orderDate?: Date;
   userId: number;
-  status?: boolean;
+  status?: string;
 }
 
 export default function ProfileDesktop() {
@@ -139,7 +139,14 @@ export default function ProfileDesktop() {
               )}
             </div>
 
-            <div className="h-1/3"></div>
+            <div className="h-1/3">
+              <Link
+                className="text-xl font-bold text-black underline"
+                href="/ProfileMail"
+              >
+                Envoyer un Mail à Garage Isep
+              </Link>
+            </div>
           </div>
 
           <div className="mx-8 w-px bg-black dark:bg-green-400"></div>

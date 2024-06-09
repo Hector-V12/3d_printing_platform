@@ -22,7 +22,7 @@ export interface Order {
   orderDate: Date;
   userId: number;
   user: UserData;
-  status: boolean;
+  status: string;
 }
 
 interface AuthContextType {

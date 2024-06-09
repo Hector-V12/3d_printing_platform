@@ -135,7 +135,7 @@ export default function CommandManagementDesktop() {
             <div className=" mb-10 ml-10 mr-10  flex  w-full flex-row justify-center">
               <div className="mt-8 flex w-auto flex-col rounded-xl bg-whiteBackground pb-10 pl-20 pr-20 pt-10">
                 <div className="mb-5 flex items-center justify-center font-extrabold text-fontBlack">
-                  Importer un fichier{" "}
+                  Importer un fichier
                   <Image className="ml-2" alt="3dIcon" src={icon3d} />
                 </div>
 

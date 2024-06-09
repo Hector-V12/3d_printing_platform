@@ -40,9 +40,8 @@ model Order {
   fileUrl         String?
   orderDate       DateTime @default(now())
   userId          Int
+  status String @default("inProgress")
   user            User     @relation(fields: [userId], references: [id])
-  status          Boolean @default(false)
-  validated       Boolean @default(false)
 }
 
 model Notifications {
@@ -54,4 +53,12 @@ model Notifications {
   adminId           Int?    
   user              User?            @relation("receivedNotifications", fields: [userId], references: [id])
   admin             User?            @relation("sentNotifications", fields: [adminId], references: [id])
+}
+
+model Email {
+  id Int  @id @default(autoincrement())
+  content String
+  userId Int?
+  userEmail String?
+  
 }

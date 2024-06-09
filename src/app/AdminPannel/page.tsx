@@ -72,8 +72,9 @@ export default function AdminPanel() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const updatedOrder = { ...response.data, status: true };
+      const updatedOrder = response.data.order; // Ensure we get the updated order data correctly
       console.log(updatedOrder);
+
       setDoneOrders((prevDoneOrders) => [...prevDoneOrders, updatedOrder]);
       setInProgressOrders((prevInProgressOrders) =>
         prevInProgressOrders.filter((o) => o.id !== order.id),
@@ -84,6 +85,7 @@ export default function AdminPanel() {
   };
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true); // Ensure loading state is set at the beginning
       try {
         const inProgressOrders = await fetchInProgressOrders();
         const doneOrders = await fetchDoneOrders();
@@ -136,8 +138,8 @@ export default function AdminPanel() {
                         </div>
                         <div className="flex items-center space-x-4 text-xl font-bold">
                           <div className="flex items-center space-x-2">
-                            <div>{order.user.surname}</div>
-                            <div>{order.user.name}</div>
+                            <div>{order.user?.surname}</div>
+                            <div>{order.user?.name}</div>
                           </div>
                           <div>
                             <button
@@ -154,7 +156,8 @@ export default function AdminPanel() {
                       <div>
                         <div className="flex items-center space-x-4 text-xl font-bold">
                           <div>email: </div>
-                          <div>{order.user.email}</div>
+                          <div>{order.user?.email}</div>
+                          <div>{order.status}</div>
                         </div>
                         <div className="flex items-center space-x-4 text-xl font-bold">
                           <div>Technologie d'impression: </div>
@@ -214,8 +217,8 @@ export default function AdminPanel() {
                           </div>
                           <div className="flex items-center space-x-4 text-xl font-bold">
                             <div className="flex items-center space-x-2">
-                              <div>{order.user.surname}</div>
-                              <div>{order.user.name}</div>
+                              <div>{order.user?.surname}</div>
+                              <div>{order.user?.name}</div>
                             </div>
                             <div>
                               <div className="text-green-500 underline">
@@ -229,7 +232,8 @@ export default function AdminPanel() {
                         <div>
                           <div className="flex items-center space-x-4 text-xl font-bold">
                             <div>email: </div>
-                            <div>{order.user.email}</div>
+                            <div>{order.user?.email}</div>
+                            <div>{order.status}</div>
                           </div>
                           <div className="flex items-center space-x-4 text-xl font-bold">
                             <div>Technologie d'impression: </div>

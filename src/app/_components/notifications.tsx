@@ -6,6 +6,13 @@ import Image from "next/image";
 import blackBellIcon from "../../public/blackBellIcon.svg";
 import axios from "axios";
 
+export interface Notifications {
+  id: number;
+  notificationTitle: string;
+  content: string;
+  notificationDate: Date;
+}
+
 export default function Notifications() {
   const [notificationsList, setNotificationsList] = useState<Notifications[]>(
     [],
@@ -63,4 +70,7 @@ export default function Notifications() {
       </div>
     </div>
   );
+}
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }

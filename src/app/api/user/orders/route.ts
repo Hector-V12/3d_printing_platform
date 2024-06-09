@@ -18,7 +18,7 @@ const prisma = new PrismaClient();
  */
 
 export async function GET(req: NextRequest) {
-  return authenticate(req, async (req) => {
+  return authenticate(req, async (req: any) => {
     const orders = await prisma.order.findMany({
       where: { userId: req.user.id },
     });
