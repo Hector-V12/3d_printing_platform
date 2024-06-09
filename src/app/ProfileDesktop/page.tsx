@@ -69,21 +69,6 @@ export default function ProfileDesktop() {
     }
   };
 
-  const handleOrderAgain = async (orderId: number) => {
-    try {
-      const response = await axios.post("/api/user/orders/orderAgain", {
-        orderId,
-      });
-      if (response.status === 200) {
-        router.push(`/CommandManagementDesktop?orderId=${orderId}`);
-      } else {
-        console.error("Failed to order again");
-      }
-    } catch (error) {
-      console.error("Error ordering again:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
