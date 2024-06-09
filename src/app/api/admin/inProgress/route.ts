@@ -47,7 +47,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const orders: Order[] = await prisma.order.findMany();
+    const orders: Order[] = await prisma.order.findMany({
+      where: {
+        status: false,
+      },
+      include: {
+        user: true,
+      },
+    });
     return NextResponse.json(orders, { status: 200 });
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -82,6 +89,7 @@ export async function PUT(req: NextRequest) {
     );
   }
 
+  console.log("status before update", status);
   try {
     const order = await prisma.order.update({
       where: { id },
@@ -91,7 +99,7 @@ export async function PUT(req: NextRequest) {
         usedSoftware,
         materialChoice,
         comment,
-        status: true,
+        status,
       },
     });
 

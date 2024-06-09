@@ -21,7 +21,8 @@ export interface Order {
   comment: string;
   orderDate: Date;
   userId: number;
-  user: UserData[];
+  user: UserData;
+  status: boolean;
 }
 
 interface AuthContextType {
