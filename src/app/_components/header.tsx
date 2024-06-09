@@ -15,11 +15,13 @@ import Link from "next/link";
 import { useDarkMode } from "./darkModeContext/darkModeContext";
 import { useLanguage } from "./languageContext/languageContext";
 import { useAuth } from "./authContext/authContext";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Header() {
   const { darkMode } = useDarkMode();
   const { translations } = useLanguage();
-  const { user, login, logout } = useAuth();
+  const router = useRouter();
 
   const [notificationsActive, setNotificationsActive] = useState(false);
 
@@ -32,7 +34,6 @@ export default function Header() {
       <div className="flex flex-row  items-center border-green-400 bg-whiteBackground p-2 dark:border-b dark:bg-slate-900">
         <div className="flex w-4/6 space-x-8">
           <Image alt={poweredIcon} src={poweredIcon} width={50} />
-          <DarkModeToggle />
         </div>
         <div className="mr-8 flex  w-3/6 flex-row-reverse">
           <div className="flex space-x-12 ">
@@ -50,15 +51,13 @@ export default function Header() {
                 width={35}
               />
             </Link>
-            <Link href="/ProfileDesktop">
+            <Link href={"/ProfileDesktop"}>
               <Image
                 alt="userRedIcon"
                 src={darkMode ? userGreenIcon : userRedIcon}
                 width={35}
               />
             </Link>
-
-            <button onClick={logout}>Logout</button>
           </div>
         </div>
       </div>

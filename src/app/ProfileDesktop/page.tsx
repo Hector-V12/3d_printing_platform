@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../_components/footer";
 import Header from "../_components/header";
 import Image from "next/image";
+import DarkModeToggle from "../_components/darkModeContext/darkModeToggle";
 
 import currentCommands from "~/assets/currentCommandsIcon.svg";
 import myAccount from "~/assets/myAccountIcon.svg";
@@ -15,12 +16,61 @@ import greenTimeIcon from "~/assets/greenTimeIcon.svg";
 
 import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
 import { useLanguage } from "../_components/languageContext/languageContext";
+import { useAuth } from "../_components/authContext/authContext";
+import axios from "axios";
+
+interface Order {
+  id: number;
+  commandTitle: string;
+  quantity: number;
+  usedSoftware: string;
+  materialChoice: string;
+  comment: string;
+  orderDate: Date;
+  userId: number;
+  status: boolean;
+}
 
 export default function ProfileDesktop() {
   const { darkMode } = useDarkMode();
   const { translations } = useLanguage();
+  const { user, logout } = useAuth();
 
-  //<div>{translations.greeting}</div>
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchInProgressOrders = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No token found");
+      const response = await axios.get("/api/user/orders/inProgress", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch orders");
+    }
+  };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const inProgressOrders = await fetchInProgressOrders();
+        setOrders(inProgressOrders);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch orders", error);
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
@@ -50,7 +100,9 @@ export default function ProfileDesktop() {
             <div className="flex flex-col items-center">
               <Image alt="myAccount" src={myAccount} height={150} width={250} />
               <div className="w-full pb-5">
-                <div>Bonjour Romain Herreknecht</div>
+                <div>
+                  Bonjour {user?.surname} {user?.name}
+                </div>
               </div>
             </div>
 
@@ -64,10 +116,7 @@ export default function ProfileDesktop() {
                   src={darkMode ? greenProfileIcon : userIcon}
                   width={25}
                 />
-                <input
-                  className="w-full border-0 bg-whiteBackground text-black outline-none placeholder:text-black dark:text-green-400"
-                  placeholder="Rohe61420"
-                />
+                <div>{user?.surname}</div>
               </div>
             </div>
             <div className=" w-full">
@@ -80,10 +129,7 @@ export default function ProfileDesktop() {
                   src={darkMode ? greenProfileIcon : userIcon}
                   width={25}
                 />
-                <input
-                  className="w-full border-0 bg-whiteBackground outline-none placeholder:text-black  dark:text-green-400"
-                  placeholder="romain.herreknecht@eleve.isep.fr"
-                />
+                <div>{user?.email}</div>
               </div>
             </div>
             <div className="w-full">
@@ -96,10 +142,7 @@ export default function ProfileDesktop() {
                   src={darkMode ? greenProfileIcon : userIcon}
                   width={25}
                 />
-                <input
-                  className="w-full border-0 bg-whiteBackground text-fontGray outline-none"
-                  placeholder="Veuillez renseigner un numéro!"
-                />
+                <div>{user?.phoneNumber}</div>
               </div>
             </div>
             <div className="flex w-full flex-col items-start">
@@ -108,7 +151,21 @@ export default function ProfileDesktop() {
               </div>
               <Image alt="timeIcon" src={darkMode ? greenTimeIcon : timeIcon} />
               <div className="flex w-full justify-between">
-                <div className="flex w-full flex-col space-y-2"></div>
+                <div className="flex w-full flex-col space-y-2 p-2">
+                  <div className="border-l border-black p-2 dark:border-green-400">
+                    {orders?.length
+                      ? orders.map((order) => (
+                          <div key={order.id} className="flex space-x-8">
+                            <div className="flex space-x-2">
+                              <div> Order:</div>
+                              <div>{order.commandTitle}</div>
+                            </div>
+                            <div>Quantity: {order.quantity}</div>
+                          </div>
+                        ))
+                      : false}
+                  </div>
+                </div>
                 <div>
                   <Image
                     alt="poweredIcon"
@@ -118,6 +175,12 @@ export default function ProfileDesktop() {
                   />
                 </div>
               </div>
+            </div>
+            <div className="flex w-full justify-between pl-10 pr-10">
+              <DarkModeToggle />
+              <button className="dark:text-green-400" onClick={logout}>
+                Logout
+              </button>
             </div>
           </div>
         </div>

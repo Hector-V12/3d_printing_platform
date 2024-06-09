@@ -9,7 +9,7 @@ const DarkModeToggle = () => {
   return (
     <button
       onClick={toggleDarkMode}
-      className="rounded bg-gray-200 p-2 dark:bg-green-400"
+      className="rounded bg-gray-200 p-2 dark:bg-green-400 dark:text-black"
     >
       {darkMode ? "Light Mode" : "Dark Mode"}
     </button>
