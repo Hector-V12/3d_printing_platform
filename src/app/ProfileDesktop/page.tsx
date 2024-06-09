@@ -20,15 +20,15 @@ import { useAuth } from "../_components/authContext/authContext";
 import axios from "axios";
 
 interface Order {
-  id: number;
+  id?: number;
   commandTitle: string;
   quantity: number;
   usedSoftware: string;
   materialChoice: string;
   comment: string;
-  orderDate: Date;
+  orderDate?: Date;
   userId: number;
-  status: boolean;
+  status?: boolean;
 }
 
 export default function ProfileDesktop() {
@@ -63,6 +63,28 @@ export default function ProfileDesktop() {
       return response.data;
     } catch (error) {
       throw new Error("Failed to fetch orders");
+    }
+  };
+
+  const orderAgain = async (order: Order) => {
+    try {
+      const newOrder = { ...order };
+
+      delete newOrder.id;
+      delete newOrder.orderDate;
+      delete newOrder.status;
+
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No token found");
+      const response = await axios.post("/api/upload", newOrder, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Order created successfully:", response.data);
+
+      const updatedInProgressOrders = await fetchInProgressOrders();
+      setInProgressOrders(updatedInProgressOrders);
+    } catch (error) {
+      console.error("Failed to create order:", error);
     }
   };
 
@@ -185,24 +207,25 @@ export default function ProfileDesktop() {
                   <div className="border-l border-black p-2 dark:border-green-400">
                     {doneOrders?.length
                       ? doneOrders.map((order) => (
-                          <div key={order.id} className="flex space-x-8">
+                          <div
+                            key={order.id}
+                            className="flex items-center space-x-8"
+                          >
                             <div className="flex space-x-2">
                               <div> Order:</div>
                               <div>{order.commandTitle}</div>
                             </div>
                             <div>Quantity: {order.quantity}</div>
+                            <button
+                              className="rounded-lg bg-white p-2"
+                              onClick={() => orderAgain(order)}
+                            >
+                              Command Again
+                            </button>
                           </div>
                         ))
                       : false}
                   </div>
-                </div>
-                <div>
-                  <Image
-                    alt="poweredIcon"
-                    src={poweredIcon}
-                    height={150}
-                    width={150}
-                  />
                 </div>
               </div>
             </div>
