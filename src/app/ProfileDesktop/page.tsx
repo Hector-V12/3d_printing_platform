@@ -93,16 +93,11 @@ export default function ProfileDesktop() {
   return (
     <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full items-center justify-center p-10">
         <div className="flex w-full max-w-6xl rounded-2xl border-green-400 bg-whiteBackground p-10 dark:border dark:bg-gray-900 dark:text-green-400">
           <div className="flex w-1/2 flex-col items-center justify-between">
-            <div className="">
-              <Image
-                alt="currentCommands"
-                src={currentCommands}
-                height={200}
-                width={300}
-              />
+            <div className="text-3xl font-extrabold">
+              Mes Commandes en cours
             </div>
             <div className="flex flex-col items-center text-2xl font-extrabold">
               {inProgressOrders?.length ? (
@@ -138,7 +133,7 @@ export default function ProfileDesktop() {
 
           <div className="flex w-1/2 flex-col items-center space-y-4 pl-5 pr-5">
             <div className="flex flex-col items-center">
-              <Image alt="myAccount" src={myAccount} height={150} width={250} />
+              <div className="text-3xl font-extrabold">Mon Compte</div>
               <div className="w-full pb-5">
                 <div>
                   {translations.greeting} {user?.surname} {user?.name}
