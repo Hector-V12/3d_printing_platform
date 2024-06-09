@@ -1,4 +1,6 @@
 {
+  "surname": "surname",
+  "name": "name",
   "userName": "用户名",
   "password": "密码",
   "connexion": "连接",

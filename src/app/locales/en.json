@@ -1,4 +1,7 @@
 {
+  "surname": "surname",
+  "name": "name",
+  "register": "Register",
   "userName": "Username",
   "password": "Password",
   "connexion": "Connexion",

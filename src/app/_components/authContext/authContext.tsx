@@ -54,6 +54,7 @@ export const AuthProvider: React.FC = ({ children }: any) => {
       const token = response.data.token;
       localStorage.setItem("userToken", token);
       const userData = await fetchUserData(token);
+      router.push("/AdviceDesktop");
       setUser(userData);
     } catch (error) {
       throw new Error("Failed to login");

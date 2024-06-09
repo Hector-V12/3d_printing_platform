@@ -7,6 +7,7 @@ import { useLanguage } from "../_components/languageContext/languageContext";
 import Footer from "../_components/footer";
 
 import { useRouter } from "next/navigation";
+import SplineViewerComponent from "../_components/spline";
 
 export default function RegisterPage() {
   const { translations } = useLanguage();
@@ -49,109 +50,115 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-gray-800 to-black p-10">
-      <div className="w-full max-w-md rounded-lg bg-white p-10 shadow-lg">
-        <h1 className="mb-6 text-center text-3xl font-bold">Register</h1>
-        {error && <div className="mb-4 text-center text-red-500">{error}</div>}
-        {success && (
-          <div className="mb-4 text-center text-green-500">{success}</div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="email"
-            >
-              {translations.mailIsep}
-            </label>
-            <input
-              className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+    <div className="flex h-screen w-full flex-col  justify-center bg-gradient-to-t from-linear2 to-linear1 dark:bg-gray-900 dark:text-white">
+      <div className="flex h-full w-full flex-col items-center justify-center space-y-6 p-14">
+        <div className="flex items-center justify-around">
+          <div className="w-full">
+            <SplineViewerComponent />
           </div>
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
-              id="password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <input
-              className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
-              id="name"
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="surname"
-            >
-              Surname
-            </label>
-            <input
-              className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
-              id="surname"
-              type="text"
-              name="surname"
-              value={formData.surname}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="mb-2 block text-sm font-bold text-gray-700"
-              htmlFor="phoneNumber"
-            >
-              Phone Number
-            </label>
-            <input
-              className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
-              id="phoneNumber"
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              className="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-              type="submit"
-            >
-              Register
-            </button>
-          </div>
-        </form>
+          <form className="" onSubmit={handleSubmit}>
+            <div className="center-items flex h-full  flex-col justify-center rounded-lg bg-whiteBackground p-10 shadow-lg">
+              <div className="text-2xl font-extrabold text-fontBlack dark:text-white">
+                {translations.register}
+              </div>
+              <div className="mb-4">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="email"
+                >
+                  {translations.mailIsep}
+                </label>
+                <input
+                  className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
+                  id="email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="password"
+                >
+                  {translations.password}
+                </label>
+                <input
+                  className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
+                  id="password"
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="name"
+                >
+                  {translations.name}
+                </label>
+                <input
+                  className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="surname"
+                >
+                  {translations.surname}
+                </label>
+                <input
+                  className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
+                  id="surname"
+                  type="text"
+                  name="surname"
+                  value={formData.surname}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="phoneNumber"
+                >
+                  {translations.phoneNumber}
+                </label>
+                <input
+                  className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"
+                  id={"phoneNumber"}
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  className="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+                  type="submit"
+                >
+                  Register
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }

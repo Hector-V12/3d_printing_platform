@@ -14,6 +14,7 @@ import arrowIcon from "~/assets/arrowRedIcon.svg";
 import Image from "next/image";
 
 import SplineViewerComponent from "~/app/_components/spline";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -57,19 +58,20 @@ export default function LoginPage() {
                   className="mb-2 block text-sm font-bold text-gray-700"
                   htmlFor="email"
                 >
-                  {translations.userName}
+                  {translations.mailIsep}
                 </label>
                 <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack bg-whiteBackground p-2">
                   <Image alt="userIcon" src={userIcon} width={35} />
                   <input
                     className="border-0 bg-whiteBackground text-black outline-none"
                     placeholder="Insérez votre Identifiant"
+                    type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="mb-6">
+              <div className="mb-6 space-y-8">
                 <label
                   className="mb-2 block text-sm font-bold text-gray-700"
                   htmlFor="password"
@@ -88,6 +90,14 @@ export default function LoginPage() {
                   <button type="submit">
                     <Image alt="arrowIcon" src={arrowIcon} width={45} />
                   </button>
+                </div>
+                <div>
+                  <Link
+                    className="font-bold text-black underline"
+                    href="/Register"
+                  >
+                    Vous n'êtes pas encore inscrit?
+                  </Link>
                 </div>
               </div>
               {error && (

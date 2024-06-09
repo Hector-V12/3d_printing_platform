@@ -1,4 +1,7 @@
 {
+  "surname": "prénom",
+  "name": "nom de famille",
+  "register": "Inscription",
   "userName": "identifiant",
   "password": "Mot de passe",
   "connexion": "Connexion",
