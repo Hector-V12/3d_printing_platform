@@ -57,5 +57,10 @@
   "ct3aMetadata": {
     "initVersion": "7.33.1"
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@1.22.22",
+  "eslintConfig": {
+    "rules": {
+      "jsx-a11y/accessible-emoji": "off"
+    }
+  }
 }

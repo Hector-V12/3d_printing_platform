@@ -35,12 +35,14 @@ model Order {
   commandTitle    String   @default("default title")
   quantity        Int
   usedSoftware    String
-  materialChoice  String
-  comment         String
+  materialChoice  String?
+  comment         String?
+  fileUrl         String?
   orderDate       DateTime @default(now())
   userId          Int
   user            User     @relation(fields: [userId], references: [id])
   status          Boolean @default(false)
+  validated       Boolean @default(false)
 }
 
 model Notifications {
