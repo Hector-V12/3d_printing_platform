@@ -83,7 +83,7 @@ export default function Header() {
   return (
     <div>
       <div className="flex flex-row  items-center border-green-400 bg-whiteBackground p-2 dark:border-b dark:bg-slate-900">
-        <div className="flex w-4/6 space-x-8">
+        <div className="flex w-1/6 space-x-8">
           <Image alt={poweredIcon} src={poweredIcon} width={50} />
         </div>
         <div className="relative flex-grow mx-4">
@@ -110,7 +110,7 @@ export default function Header() {
             </ul>
           )}
         </div>
-        <div className="mr-8 flex  w-3/6 flex-row-reverse">
+        <div className="mr-8 flex  w-1/6 flex-row-reverse">
           <div className="flex space-x-12 ">
             <button onClick={onNotificationsClick}>
               <Image
