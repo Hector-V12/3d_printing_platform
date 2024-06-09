@@ -33,6 +33,10 @@ export interface Translation {
   ou: string;
   notification: string;
   surname: string;
+  orderAgain: string;
+  darkMode: string;
+  lightMode: string;
+  disconnect: string;
 }
 
 export type Language = "en" | "fr" | "es" | "zh";
