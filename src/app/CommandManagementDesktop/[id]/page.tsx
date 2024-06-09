@@ -298,25 +298,6 @@ export default function CommandManagementDesktop({
                   </Link>
                 </div>
               </div>
-              <div className="border-l border-black p-2 text-white dark:border-green-400">
-                {doneOrders?.length
-                  ? doneOrders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="flex items-center space-x-8"
-                      >
-                        <div className="flex space-x-2">
-                          <div> Order:</div>
-                          <div>{order.commandTitle}</div>
-                        </div>
-                        <div>Quantity: {order.quantity}</div>
-                        <button onClick={() => handleOrderAgainClick(order)}>
-                          Order Again
-                        </button>
-                      </div>
-                    ))
-                  : false}
-              </div>
             </div>
           )}
         </div>

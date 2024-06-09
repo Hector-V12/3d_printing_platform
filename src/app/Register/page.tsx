@@ -9,6 +9,7 @@ import Footer from "../_components/footer";
 import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const { translations } = useLanguage();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -61,7 +62,7 @@ export default function RegisterPage() {
               className="mb-2 block text-sm font-bold text-gray-700"
               htmlFor="email"
             >
-              Email
+              {translations.}
             </label>
             <input
               className="w-full rounded border px-3 py-2 text-gray-700 shadow focus:outline-none"

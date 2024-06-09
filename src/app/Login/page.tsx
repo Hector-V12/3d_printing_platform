@@ -1,10 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "../_components/languageContext/languageContext";
 import { useAuth } from "../_components/authContext/authContext";
 import axios from "axios";
+import Footer from "../_components/footer";
+import userIcon from "~/assets/userIcon.svg";
+import doorIcon from "~/assets/doorIcon.svg";
+import moodleConnexionIcon from "~/assets/MoodleConnexionIcon.svg";
+
+import arrowIcon from "~/assets/arrowRedIcon.svg";
+import Image from "next/image";
+
+import SplineViewerComponent from "~/app/_components/spline";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,59 +35,69 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-end bg-gradient-to-r from-gray-800 to-black p-10">
-      <div className="flex flex-col items-center space-y-6">
-        <div className="w-full max-w-md rounded-lg bg-white p-10 shadow-lg">
-          <h1 className="mb-2 text-center text-3xl font-bold">Connexion</h1>
-          <h2 className="mb-6 text-center text-xl font-light text-gray-500">
-            Moodle
-          </h2>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="email"
-              >
-                {translations.userName}
-              </label>
-              <input
-                className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                id="email"
-                type="text"
-                placeholder="Insérez votre identifiant"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-6">
-              <label
-                className="mb-2 block text-sm font-bold text-gray-700"
-                htmlFor="password"
-              >
-                {translations.password}
-              </label>
-              <input
-                className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                id="password"
-                type="password"
-                placeholder="Insérez votre mot de passe"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-                type="button"
-                onClick={handleLogin}
-              >
+    <div className="flex h-screen w-full flex-col  justify-center bg-gradient-to-t from-linear2 to-linear1 dark:bg-gray-900 dark:text-white">
+      <div className="flex h-full w-full flex-col items-center justify-center space-y-6 p-14">
+        <div className="flex items-center justify-around">
+          <div className="w-full">
+            <SplineViewerComponent />
+          </div>
+          <div className="flex h-full w-full max-w-md flex-col justify-center space-y-8 rounded-lg bg-whiteBackground p-10 shadow-lg">
+            <div>
+              <h1 className="mb-2 text-center text-3xl font-bold">
                 {translations.connexion}
-              </button>
+              </h1>
+              <h2 className="mb-6 text-center text-xl font-light text-gray-500">
+                Moodle
+              </h2>
             </div>
-            {error && <div className="mt-4 text-sm text-red-500">{error}</div>}
-          </form>
+
+            <form onSubmit={handleLogin}>
+              <div className="mb-4">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="email"
+                >
+                  {translations.userName}
+                </label>
+                <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack bg-whiteBackground p-2">
+                  <Image alt="userIcon" src={userIcon} width={35} />
+                  <input
+                    className="border-0 bg-whiteBackground text-black outline-none"
+                    placeholder="Insérez votre Identifiant"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mb-6">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700"
+                  htmlFor="password"
+                >
+                  {translations.password}
+                </label>
+                <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack bg-whiteBackground p-2">
+                  <Image alt="doorIcon" src={doorIcon} width={35} />
+                  <input
+                    type="password"
+                    className="bg-whiteBackground text-black outline-none"
+                    placeholder="Insérez votre mot de passe"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button type="submit">
+                    <Image alt="arrowIcon" src={arrowIcon} width={45} />
+                  </button>
+                </div>
+              </div>
+              {error && (
+                <div className="mt-4 text-sm text-red-500">{error}</div>
+              )}
+            </form>
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
