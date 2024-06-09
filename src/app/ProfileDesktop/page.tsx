@@ -36,7 +36,8 @@ export default function ProfileDesktop() {
   const { translations } = useLanguage();
   const { user, logout } = useAuth();
 
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [inProgressOrders, setInProgressOrders] = useState<Order[]>([]);
+  const [doneOrders, setDoneOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchInProgressOrders = async () => {
@@ -52,11 +53,26 @@ export default function ProfileDesktop() {
     }
   };
 
+  const fetchDoneOrders = async () => {
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) throw new Error("No token found");
+      const response = await axios.get("/api/user/orders/done", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch orders");
+    }
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const inProgressOrders = await fetchInProgressOrders();
-        setOrders(inProgressOrders);
+        const doneOrders = await fetchDoneOrders();
+        setDoneOrders(doneOrders);
+        setInProgressOrders(inProgressOrders);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch orders", error);
@@ -86,9 +102,23 @@ export default function ProfileDesktop() {
               />
             </div>
             <div className="flex flex-col items-center text-2xl font-extrabold">
-              <div>Vous n'avez</div>
-              <div>pas encore effectué</div>
-              <div>de commande</div>
+              {inProgressOrders?.length ? (
+                inProgressOrders.map((order) => (
+                  <div key={order.id} className="flex space-x-8">
+                    <div className="flex space-x-2">
+                      <div> Order:</div>
+                      <div>{order.commandTitle}</div>
+                    </div>
+                    <div>Quantity: {order.quantity}</div>
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <div>Vous n'avez</div>
+                  <div>pas encore effectué</div>
+                  <div>de commande</div>
+                </div>
+              )}
             </div>
 
             <div className="h-1/3"></div>
@@ -153,8 +183,8 @@ export default function ProfileDesktop() {
               <div className="flex w-full justify-between">
                 <div className="flex w-full flex-col space-y-2 p-2">
                   <div className="border-l border-black p-2 dark:border-green-400">
-                    {orders?.length
-                      ? orders.map((order) => (
+                    {doneOrders?.length
+                      ? doneOrders.map((order) => (
                           <div key={order.id} className="flex space-x-8">
                             <div className="flex space-x-2">
                               <div> Order:</div>
