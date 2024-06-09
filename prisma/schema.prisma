@@ -37,4 +37,5 @@ model Order {
   orderDate       DateTime @default(now())
   userId          Int
   user            User     @relation(fields: [userId], references: [id])
+  status          Boolean @default(false)
 }

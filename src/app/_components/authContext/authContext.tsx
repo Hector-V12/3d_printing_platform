@@ -1,15 +1,31 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 interface UserData {
-  id: number; // Assuming the user ID is of type number
+  id: number;
+  name: string;
+  surname: string;
   email: string;
-  // Add other user properties here
+  phoneNumber: string;
+  orders: Order[];
+}
+
+export interface Order {
+  id: number;
+  commandTitle: string;
+  quantity: number;
+  usedSoftware: string;
+  materialChoice: string;
+  comment: string;
+  orderDate: Date;
+  userId: number;
+  user: UserData[];
 }
 
 interface AuthContextType {
   user: UserData | null;
-  login: (userData: UserData, id: string, token: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -19,25 +35,48 @@ export const AuthProvider: React.FC = ({ children }: any) => {
   const [user, setUser] = useState<UserData | null>(null);
   const router = useRouter();
 
-  const login = (userData: UserData, id: number, token: string) => {
-    setUser(userData);
-    localStorage.setItem("userToken", token);
-    localStorage.setItem("userId", id.toString()); // Store user ID
+  const fetchUserData = async (token: string) => {
+    try {
+      const response = await axios.get("/api/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch user data");
+    }
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await axios.post("/api/auth/login", { email, password });
+      const token = response.data.token;
+      localStorage.setItem("userToken", token);
+      const userData = await fetchUserData(token);
+      setUser(userData);
+    } catch (error) {
+      throw new Error("Failed to login");
+    }
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("userToken");
-    localStorage.removeItem("userId"); // Remove user ID from local storage
     router.push("/Login");
   };
 
   useEffect(() => {
     const storedToken = localStorage.getItem("userToken");
-    const storedUserId = localStorage.getItem("userId"); // Retrieve user ID from local storage
-    const storedUserData = localStorage.getItem("userData");
-    if (storedToken && storedUserData && storedUserId) {
-      setUser(JSON.parse(storedUserData));
+    if (storedToken) {
+      const fetchData = async () => {
+        try {
+          const storedUserData = await fetchUserData(storedToken);
+          setUser(storedUserData);
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          logout(); // Log out user if error occurs during data fetching
+        }
+      };
+      fetchData();
     }
   }, []);
 

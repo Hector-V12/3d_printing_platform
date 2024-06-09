@@ -16,44 +16,12 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const token = await loginUser(email, password);
-      // Save token to local storage or cookie
+      await login(email, password);
 
-      const userData = await fetchUserData(token);
-      if (userData && userData.id) {
-        localStorage.setItem("userId", userData.id.toString()); // Store user ID in local storage
-      }
-
-      login(userData, userData.id, token);
-
-      // Redirect to dashboard or desired page
-      router.push("/ProfileDesktop");
+      router.push("/AdviceDesktop");
     } catch (error) {
       console.log(error);
       setError("Failed to login. Please check your credentials.");
-    }
-  };
-
-  const loginUser = async (email: string, password: string) => {
-    try {
-      const response = await axios.post("/api/auth/login", { email, password });
-      if (!response.data.token) {
-        throw new Error("Token not found");
-      }
-      return response.data.token;
-    } catch (error) {
-      throw new Error("Login failed");
-    }
-  };
-
-  const fetchUserData = async (token: string) => {
-    try {
-      const response = await axios.get("/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch user data");
     }
   };
 
@@ -65,7 +33,7 @@ export default function LoginPage() {
           <h2 className="mb-6 text-center text-xl font-light text-gray-500">
             Moodle
           </h2>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label
                 className="mb-2 block text-sm font-bold text-gray-700"

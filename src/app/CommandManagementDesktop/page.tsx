@@ -14,6 +14,7 @@ import uploadIcon from "../../public/uploadIcon.svg";
 import formatErrorIcon from "../../public/formatErrorIcon.svg";
 import Notifications from "../_components/notifications";
 import { prisma } from "../../../lib/prisma";
+import axios from "axios";
 
 export interface Command {
   CommandTitle: string;
@@ -31,34 +32,48 @@ export default function CommandManagementDesktop() {
   const [materialChoice, setMaterialChoice] = useState("");
   const [comment, setComment] = useState("");
   const [commands, setCommands] = useState<Command[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const data = {
-      commandTitle,
-      quantity,
-      usedSoftware,
-      materialChoice,
-      comment,
-    };
+    setLoading(true);
+    setError(null);
 
-    console.log(data);
-  };
+    try {
+      const token = localStorage.getItem("userToken");
+      if (!token) {
+        throw new Error("User token not found");
+      }
 
-  /*try {
-    const response = await axios.post("/api/commands", data);
+      const response = await axios.post(
+        "/api/upload",
+        {
+          commandTitle,
+          quantity: parseInt(quantity),
+          usedSoftware,
+          materialChoice,
+          comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-    if (response.status !== 200) {
-      throw new Error("Network response was not ok");
+      console.log("Order created successfully:", response.data);
+      // Optionally, you can redirect the user to another page or show a success message
+    } catch (error) {
+      console.error("Error creating order:", error);
+      setError("Failed to create order. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    const result = response.data;
-    console.log("Success:", result);
-    setCommands([...commands, result]); // Update the commands state with the new command
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};*/
+  };
 
   return (
     <div className="flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
@@ -199,9 +214,11 @@ export default function CommandManagementDesktop() {
               <button className="flex h-5/6 flex-row items-center space-x-2">
                 <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
                   <Image alt="uploadIcon" src={uploadIcon} />
-                  <div className="text-4xl font-extrabold ">
+                  <input type="file" />
+                  <button className="text-4xl font-extrabold ">
+                    {uploadStatus && <p>{uploadStatus}</p>}
                     Importer un fichier 3d
-                  </div>
+                  </button>
                 </div>
                 <Image alt="3dIcon" src={icon3d} width={95} />
               </button>
