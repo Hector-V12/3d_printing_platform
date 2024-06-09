@@ -7,6 +7,7 @@ interface UserData {
   name: string;
   surname: string;
   email: string;
+  isAdmin: boolean;
   phoneNumber: string;
   orders: Order[];
 }

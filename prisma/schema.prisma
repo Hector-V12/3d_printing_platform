@@ -21,10 +21,13 @@ model User {
   password    String
   name        String
   surname     String
+  isAdmin Boolean @default(false)
   phoneNumber String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orders      Order[]
+  notificationsSent Notifications[]  @relation("sentNotifications")
+  notificationsReceived Notifications[] @relation("receivedNotifications")
 }
 
 model Order {
@@ -46,5 +49,7 @@ model Notifications {
    content String
    notificationDate DateTime@default(now())
    userId            Int?      // Foreign key referencing the User model
-  adminId           Int?      // Foreign key referencing the Admin model
+  adminId           Int?    
+  user              User?            @relation("receivedNotifications", fields: [userId], references: [id])
+  admin             User?            @relation("sentNotifications", fields: [adminId], references: [id])
 }
