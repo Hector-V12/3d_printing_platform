@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from "react";
 import Image from "next/image";
 import Notifications from "./notifications";
@@ -18,15 +21,63 @@ import { useAuth } from "./authContext/authContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+interface Model {
+  id: string;
+  commandTitle: string;
+}
+
 export default function Header() {
   const { darkMode } = useDarkMode();
   const { translations } = useLanguage();
   const router = useRouter();
 
   const [notificationsActive, setNotificationsActive] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [searchResults, setSearchResults] = useState<Model[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const onNotificationsClick = () => {
     setNotificationsActive(!notificationsActive);
+  };
+
+  const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchText(query);
+
+    if (query.length > 0) {
+      try {
+        const token = localStorage.getItem("userToken");
+        const response = await axios.get('/api/user/orders/validated', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSearchResults(response.data);
+      } catch (error) {
+        console.error('Error searching users:', error);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleMouseEnter = (index: number) => {
+    setSelectedIndex(index);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowDown') {
+      setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length);
+    } else if (event.key === 'ArrowUp') {
+      setSelectedIndex((prevIndex) => (prevIndex - 1 + searchResults.length) % searchResults.length);
+    } else if (event.key === 'Enter' && selectedIndex >= 0) {
+      handleResultClick(searchResults[selectedIndex].id);
+    }
+  };
+
+  const handleResultClick = (userId: string) => {
+    setSearchText(''); // Clear the search bar
+    setSearchResults([]); // Clear the search results 
+    setSelectedIndex(-1);
+    window.location.href = '/CommandManagementDesktop';// Reset selected index
   };
 
   return (
@@ -34,6 +85,30 @@ export default function Header() {
       <div className="flex flex-row  items-center border-green-400 bg-whiteBackground p-2 dark:border-b dark:bg-slate-900">
         <div className="flex w-4/6 space-x-8">
           <Image alt={poweredIcon} src={poweredIcon} width={50} />
+        </div>
+        <div className="relative flex-grow mx-4">
+          <input
+            type="text"
+            placeholder="Search here..."
+            className="w-full py-2 px-4 rounded-full text-gray-800"
+            value={searchText}
+            onChange={handleSearch}
+            onKeyDown={handleKeyDown} // Add this line
+          />
+          {searchResults.length > 0 && (
+            <ul className="absolute z-10 bg-white text-gray-800 w-full mt-1 rounded-lg shadow-lg">
+              {searchResults.map((result, index) => (
+                <li
+                  key={result.id}
+                  className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${index === selectedIndex ? 'bg-gray-300' : ''}`} // Highlight the selected result
+                  onClick={() => handleResultClick(result.id)}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                >
+                  {result.commandTitle}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="mr-8 flex  w-3/6 flex-row-reverse">
           <div className="flex space-x-12 ">

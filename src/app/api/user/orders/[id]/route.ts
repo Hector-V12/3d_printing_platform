@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import authenticate from "../../../../middleware/auth";
+import authenticate from "../../../../../middleware/auth";
 
 const prisma = new PrismaClient();
 
