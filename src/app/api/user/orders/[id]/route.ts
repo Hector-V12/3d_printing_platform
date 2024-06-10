@@ -5,28 +5,24 @@ import authenticate from "../../../../../middleware/auth";
 
 const prisma = new PrismaClient();
 
-/**
- * @swagger
- * /api/orders/{id}:
- *  post:
- *   description: Get a specific order by id
- *  responses:
- *   200:
- *      description: Order found
- *   404:
- *   description: Order not found
- */
-
-export async function GET(
+export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } },
 ) {
   return authenticate(req, async (req: any) => {
+    const orderId = parseInt(params.id);
+    if (isNaN(orderId)) {
+      return NextResponse.json(
+        { message: "Invalid order ID" },
+        { status: 400 },
+      );
+    }
+
     const order = await prisma.order.findUnique({
-      where: { id: parseInt(params.id) },
+      where: { id: req.id },
     });
 
-    if (!order || order.userId !== req.user.id) {
+    if (!order) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
     }
 

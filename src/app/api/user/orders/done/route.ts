@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const orders = await prisma.order.findMany({
       where: {
         userId: req.user.id,
-        status: true,
+        status: "done",
       },
     });
 

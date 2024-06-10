@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Order } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
+const AWS = require("./awsSetUp");
+
 const prisma = new PrismaClient();
 
 async function verifyAdminToken(
@@ -91,11 +93,14 @@ export async function PUT(req: NextRequest) {
         usedSoftware,
         materialChoice,
         comment,
-        status: true,
+        status: status || "done", // Use provided status or default to 'done'
+      },
+      include: {
+        user: true, // Include user information in the order query
       },
     });
 
-    if (status && status === true) {
+    if ((order.status = "done")) {
       const notification = await prisma.notifications.create({
         data: {
           notificationTitle: "Order Status Updated",
@@ -103,8 +108,31 @@ export async function PUT(req: NextRequest) {
           userId: order.userId,
         },
       });
+      const ses = new AWS.SES({ region: "eu-north-1" });
+      const params = {
+        Destination: {
+          ToAddresses: [order.user.email],
+        },
+        Message: {
+          Body: {
+            Text: {
+              Data: `Your order "${order.commandTitle}" has been completed.`,
+            },
+          },
+          Subject: {
+            Data: "Order Status Updated",
+          },
+        },
+        Source: "victor.dubrana@gmail.com",
+      };
+
+      await ses.sendEmail(params).promise();
+
+      console.log("Email sent successfully");
 
       console.log("Notification sent:", notification);
+    } else {
+      console.log(status);
     }
 
     return NextResponse.json(

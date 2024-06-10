@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+const AWS = require("../admin/awsSetUp");
 
 const prisma = new PrismaClient();
 
@@ -22,37 +23,53 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
-  const { commandTitle, quantity, usedSoftware, materialChoice, comment } =
-    await req.json();
+  const { content, userEmail } = await req.json();
 
-  if (!commandTitle || !quantity || !usedSoftware || !materialChoice) {
+  if (!content) {
     return NextResponse.json(
-      { message: "All fields are required" },
+      { content: "Message field is required" },
       { status: 400 },
     );
   }
 
   try {
-    const order = await prisma.order.create({
+    const email = await prisma.email.create({
       data: {
-        commandTitle,
-        quantity,
-        usedSoftware,
-        materialChoice,
-        comment,
-        user: { connect: { id: userId } },
-        status: "inProgress",
+        userId,
+        userEmail,
+        content,
       },
     });
+    const ses = new AWS.SES({ region: "eu-north-1" });
+    const params = {
+      Destination: {
+        ToAddresses: ["victor.dubrana@gmail.com"],
+      },
+      Message: {
+        Body: {
+          Text: {
+            Data: `User Email: "${userEmail}": "${content}".`,
+          },
+        },
+        Subject: {
+          Data: "Order Status Updated",
+        },
+      },
+      Source: "victor.dubrana@gmail.com",
+    };
+    // Send email
+    await ses.sendEmail(params).promise();
+
+    console.log("Email sent successfully");
 
     return NextResponse.json(
-      { message: "Order created successfully", order },
+      { message: "Email sent successfully" },
       { status: 201 },
     );
   } catch (error) {
-    console.error("Error creating order:", error);
+    console.error("Error sending email:", error);
     return NextResponse.json(
-      { message: "Failed to create order" },
+      { message: "Failed to send email" },
       { status: 500 },
     );
   }

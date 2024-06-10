@@ -30,7 +30,7 @@ interface Order {
   comment: string;
   orderDate?: Date;
   userId: number;
-  status?: boolean;
+  status?: string;
 }
 
 export default function ProfileDesktop() {
@@ -69,21 +69,6 @@ export default function ProfileDesktop() {
     }
   };
 
-  const handleOrderAgain = async (orderId: number) => {
-    try {
-      const response = await axios.post("/api/user/orders/orderAgain", {
-        orderId,
-      });
-      if (response.status === 200) {
-        router.push(`/CommandManagementDesktop?orderId=${orderId}`);
-      } else {
-        console.error("Failed to order again");
-      }
-    } catch (error) {
-      console.error("Error ordering again:", error);
-    }
-  };
-
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -108,16 +93,11 @@ export default function ProfileDesktop() {
   return (
     <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
-      <div className="flex h-full items-center justify-center">
+      <div className="flex h-full items-center justify-center p-10">
         <div className="flex w-full max-w-6xl rounded-2xl border-green-400 bg-whiteBackground p-10 dark:border dark:bg-gray-900 dark:text-green-400">
           <div className="flex w-1/2 flex-col items-center justify-between">
-            <div className="">
-              <Image
-                alt="currentCommands"
-                src={currentCommands}
-                height={200}
-                width={300}
-              />
+            <div className="text-3xl font-extrabold">
+              Mes Commandes en cours
             </div>
             <div className="flex flex-col items-center text-2xl font-extrabold">
               {inProgressOrders?.length ? (
@@ -139,24 +119,31 @@ export default function ProfileDesktop() {
               )}
             </div>
 
-            <div className="h-1/3"></div>
+            <div className="h-1/3">
+              <Link
+                className="text-xl font-bold text-black underline dark:text-green-400"
+                href="/ProfileMail"
+              >
+                Envoyer un Mail à Garage Isep
+              </Link>
+            </div>
           </div>
 
           <div className="mx-8 w-px bg-black dark:bg-green-400"></div>
 
           <div className="flex w-1/2 flex-col items-center space-y-4 pl-5 pr-5">
             <div className="flex flex-col items-center">
-              <Image alt="myAccount" src={myAccount} height={150} width={250} />
+              <div className="text-3xl font-extrabold">Mon Compte</div>
               <div className="w-full pb-5">
                 <div>
-                  Bonjour {user?.surname} {user?.name}
+                  {translations.greeting} {user?.surname} {user?.name}
                 </div>
               </div>
             </div>
 
             <div className=" w-full">
               <div className="text-xl font-extrabold text-fontBlack dark:text-green-400">
-                Identifiant
+                {translations.surname}
               </div>
               <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack p-2">
                 <Image
@@ -169,7 +156,7 @@ export default function ProfileDesktop() {
             </div>
             <div className=" w-full">
               <div className="text-xl font-extrabold text-fontBlack  dark:text-green-400">
-                Adresse Isep
+                {translations.mailIsep}
               </div>
               <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack p-2">
                 <Image
@@ -182,7 +169,7 @@ export default function ProfileDesktop() {
             </div>
             <div className="w-full">
               <div className="text-xl font-extrabold text-fontBlack dark:text-green-400">
-                Numéro
+                {translations.phoneNumber}
               </div>
               <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack p-2">
                 <Image
@@ -195,7 +182,7 @@ export default function ProfileDesktop() {
             </div>
             <div className="flex w-full flex-col items-start">
               <div className="text-xl font-extrabold">
-                Historique des Commandes
+                {translations.orderHistory}
               </div>
               <Image alt="timeIcon" src={darkMode ? greenTimeIcon : timeIcon} />
               <div className="flex w-full justify-between">
@@ -208,10 +195,18 @@ export default function ProfileDesktop() {
                             className="flex items-center space-x-8"
                           >
                             <div className="flex space-x-2">
-                              <div> Order:</div>
+                              <div> {translations.order}:</div>
                               <div>{order.commandTitle}</div>
                             </div>
-                            <div>Quantity: {order.quantity}</div>
+                            <div>
+                              {translations.quantity}: {order.quantity}
+                            </div>
+                            <Link
+                              className="rounded-lg bg-white p-2 dark:bg-green-400 dark:text-black"
+                              href={`/CommandManagementDesktop/${order.id}`}
+                            >
+                              {translations.orderAgain}
+                            </Link>
                           </div>
                         ))
                       : false}
