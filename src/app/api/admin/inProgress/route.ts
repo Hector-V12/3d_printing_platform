@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
   try {
     const orders: Order[] = await prisma.order.findMany({
       where: {
-        status: false,
+        status: "inProgress",
       },
       include: {
         user: true,
@@ -101,9 +101,12 @@ export async function PUT(req: NextRequest) {
         comment,
         status,
       },
+      include: {
+        user: true,
+      },
     });
 
-    if (status && status === true) {
+    if (status === "done") {
       const notification = await prisma.notifications.create({
         data: {
           notificationTitle: "Order Status Updated",

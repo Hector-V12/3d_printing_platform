@@ -6,8 +6,9 @@ import Image from "next/image";
 import blackBellIcon from "../../public/blackBellIcon.svg";
 import axios from "axios";
 
+
+export interface Notifications {
 // Define the Notifications interface
-interface Notification {
   id: number;
   notificationTitle: string;
   content: string;
@@ -75,4 +76,7 @@ export default function Notifications() {
       </div>
     </div>
   );
+}
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }

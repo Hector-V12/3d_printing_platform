@@ -21,8 +21,7 @@ export async function GET(req: NextRequest) {
   return authenticate(req, async (req: any) => {
     const orders = await prisma.order.findMany({
       where: {
-        userId: req.user.id,
-        status: "inProgress",
+        id: req.id,
       },
     });
 

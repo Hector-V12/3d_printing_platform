@@ -3,17 +3,17 @@
 import React, { useEffect, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import Footer from "../_components/footer";
-import Header from "../_components/header";
+import Footer from "../../_components/footer";
+import Header from "../../_components/header";
 
-import icon3d from "../../public/icon3d.svg";
-import boxIcon from "../../public/boxIcon.svg";
-import personIcon from "../../public/personIcon.svg";
-import whiteCartIcon from "../../public/cartWhiteIcon.svg";
-import uploadIcon from "../../public/uploadIcon.svg";
-import formatErrorIcon from "../../public/formatErrorIcon.svg";
-import Notifications from "../_components/notifications";
-import { prisma } from "../../../lib/prisma";
+import icon3d from "~/assets/icon3d.svg";
+import boxIcon from "~/assets/boxIcon.svg";
+import personIcon from "~/assets/personIcon.svg";
+import whiteCartIcon from "~/assets/cartWhiteIcon.svg";
+import uploadIcon from "~/assets/uploadIcon.svg";
+import formatErrorIcon from "~/assets/formatErrorIcon.svg";
+import Notifications from "~/app/_components/notifications";
+import { prisma } from "../../../../lib/prisma";
 import axios from "axios";
 
 export interface Command {
@@ -36,7 +36,10 @@ interface Order {
   status?: boolean;
 }
 
-export default function CommandManagementDesktop() {
+export default function CommandManagementDesktop({
+  params,
+  searchParams,
+}: any) {
   const [formatError, setFormatError] = useState(false);
   const [commandTitle, setCommandTitle] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -45,12 +48,14 @@ export default function CommandManagementDesktop() {
   const [comment, setComment] = useState("");
   const [commands, setCommands] = useState<Command[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
+  const [order, setOrder] = useState<Order>();
 
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
+  const { id } = params.id;
 
   const handleOrderAgainClick = (order: Order) => {
     // Set form fields with the values from the selected order
@@ -61,38 +66,48 @@ export default function CommandManagementDesktop() {
     setComment(order.comment);
   };
 
-  const fetchDoneOrders = async () => {
+  useEffect(() => {
+    if (params.id) {
+      fetchOrderData(params.id as string);
+    }
+  }, []);
+
+  const fetchOrderData = async (orderId: string) => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("userToken");
-      if (!token) throw new Error("No token found");
-      const response = await axios.get("/api/user/orders/done", {
-        headers: { Authorization: `Bearer ${token}` },
+      if (!token) {
+        throw new Error("User token not found");
+      }
+
+      const response = await axios.post(`/api/orders/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch orders");
+
+      const order: Order = response.data;
+      setCommandTitle(order.commandTitle);
+      setQuantity(order.quantity.toString());
+      setUsedSoftware(order.usedSoftware);
+      setMaterialChoice(order.materialChoice);
+      setComment(order.comment);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        setError("Order not found.");
+      } else {
+        console.error("Failed to fetch order data:", error);
+        setError("Failed to fetch order data. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const doneOrders = await fetchDoneOrders();
-        setDoneOrders(doneOrders);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch orders", error);
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, []);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
       const token = localStorage.getItem("userToken");
@@ -163,9 +178,9 @@ export default function CommandManagementDesktop() {
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <input
                       className="w-full  bg-whiteBackground text-fontBlack outline-none"
-                      placeholder="0"
+                      placeholder={params.commandTitle}
                       name="Quantity"
-                      value={quantity}
+                      value={params.CommandTitle}
                       onChange={(e) => setQuantity(e.target.value)}
                       required
                     />

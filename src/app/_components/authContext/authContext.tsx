@@ -22,7 +22,7 @@ export interface Order {
   orderDate: Date;
   userId: number;
   user: UserData;
-  status: boolean;
+  status: string;
 }
 
 interface AuthContextType {
@@ -58,6 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const token = response.data.token;
       localStorage.setItem("userToken", token);
       const userData = await fetchUserData(token);
+      router.push("/AdviceDesktop");
       setUser(userData);
     } catch (error) {
       throw new Error("Failed to login");
