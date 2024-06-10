@@ -15,6 +15,11 @@ import formatErrorIcon from "~/assets/formatErrorIcon.svg";
 import Notifications from "~/app/_components/notifications";
 import { prisma } from "../../../../lib/prisma";
 import axios from "axios";
+import { EthereumModel } from "~/app/_components/modelViewer";
+import { Canvas } from "@react-three/fiber";
+import { Model, UrlModel } from "~/app/_components/model";
+import { OrbitControls } from "@react-three/drei";
+import { Mesh } from "three";
 
 export interface Command {
   CommandTitle: string;
@@ -34,6 +39,7 @@ interface Order {
   orderDate?: Date;
   userId: number;
   status?: boolean;
+  fileUrl?: string;
 }
 
 export default function CommandManagementDesktop({
@@ -49,6 +55,7 @@ export default function CommandManagementDesktop({
   const [commands, setCommands] = useState<Command[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -59,11 +66,11 @@ export default function CommandManagementDesktop({
 
   const handleOrderAgainClick = (order: Order) => {
     // Set form fields with the values from the selected order
-    setCommandTitle(order.commandTitle);
-    setQuantity(order.quantity.toString());
-    setUsedSoftware(order.usedSoftware);
-    setMaterialChoice(order.materialChoice);
-    setComment(order.comment);
+    setCommandTitle(order.commandTitle || "");
+    setQuantity(order.quantity.toString() || "");
+    setUsedSoftware(order.usedSoftware || "");
+    setMaterialChoice(order.materialChoice || "");
+    setComment(order.comment || "");
   };
 
   useEffect(() => {
@@ -87,11 +94,13 @@ export default function CommandManagementDesktop({
       });
 
       const order: Order = response.data;
-      setCommandTitle(order.commandTitle);
-      setQuantity(order.quantity.toString());
-      setUsedSoftware(order.usedSoftware);
-      setMaterialChoice(order.materialChoice);
-      setComment(order.comment);
+      setCommandTitle(order.commandTitle || "");
+      setQuantity(order.quantity.toString() || "");
+      setUsedSoftware(order.usedSoftware || "");
+      setMaterialChoice(order.materialChoice || "");
+      setComment(order.comment || "");
+      setFileUrl(order.fileUrl || "");
+
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
         setError("Order not found.");
@@ -178,9 +187,9 @@ export default function CommandManagementDesktop({
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <input
                       className="w-full  bg-whiteBackground text-fontBlack outline-none"
-                      placeholder={params.commandTitle}
+                      placeholder={quantity}
                       name="Quantity"
-                      value={params.CommandTitle}
+                      value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                       required
                     />
@@ -280,14 +289,13 @@ export default function CommandManagementDesktop({
               <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
                 <button className="flex h-5/6 flex-row items-center space-x-2">
                   <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
-                    <Image alt="uploadIcon" src={uploadIcon} />
-                    <input type="file" />
-                    <button className="text-4xl font-extrabold ">
-                      {uploadStatus && <p>{uploadStatus}</p>}
-                      Importer un fichier 3d
-                    </button>
+                    <Canvas style={{ height: "500px", width: "100%" }}>
+                      <OrbitControls />
+                      <mesh>
+                        <Model fileUrl={fileUrl} />
+                      </mesh>
+                    </Canvas>
                   </div>
-                  <Image alt="3dIcon" src={icon3d} width={95} />
                 </button>
                 <div className="center-items w-1/5 ">
                   <Link

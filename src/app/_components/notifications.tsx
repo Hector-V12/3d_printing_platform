@@ -8,7 +8,7 @@ import axios from "axios";
 
 
 export interface Notifications {
-// Define the Notifications interface
+  // Define the Notifications interface
   id: number;
   notificationTitle: string;
   content: string;

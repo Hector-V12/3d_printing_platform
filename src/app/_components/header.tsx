@@ -87,7 +87,8 @@ export default function Header() {
     setSearchText(''); // Clear the search bar
     setSearchResults([]); // Clear the search results
     setSelectedIndex(-1);
-    window.location.href = '/CommandManagementDesktop/${orderId}'; // Reset selected index
+    router.push(`/CommandManagementDesktop/${orderId}`)
+
   };
 
   return (

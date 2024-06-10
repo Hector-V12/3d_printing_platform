@@ -43,14 +43,15 @@ model Order {
   userId          Int
   status String @default("inProgress")
   user            User     @relation(fields: [userId], references: [id])
+  validated       Boolean @default(false)  
 }
 
 model Notifications {
-   id              Int      @id @default(autoincrement())
-   notificationTitle String
-   content String
-   notificationDate DateTime@default(now())
-   userId            Int?      // Foreign key referencing the User model
+  id              Int      @id @default(autoincrement())
+  notificationTitle String
+  content String
+  notificationDate DateTime@default(now())
+  userId            Int?      // Foreign key referencing the User model
   adminId           Int?    
   user              User?            @relation("receivedNotifications", fields: [userId], references: [id])
   admin             User?            @relation("sentNotifications", fields: [adminId], references: [id])
@@ -61,5 +62,5 @@ model Email {
   content String
   userId Int?
   userEmail String?
-  
 }
+
