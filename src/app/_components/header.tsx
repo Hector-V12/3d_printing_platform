@@ -83,11 +83,11 @@ export default function Header() {
     }
   };
 
-  const handleResultClick = (userId: string) => {
+  const handleResultClick = (orderId: string) => {
     setSearchText(''); // Clear the search bar
     setSearchResults([]); // Clear the search results
     setSelectedIndex(-1);
-    window.location.href = '/CommandManagementDesktop'; // Reset selected index
+    window.location.href = '/CommandManagementDesktop/${orderId}'; // Reset selected index
   };
 
   return (
@@ -129,7 +129,7 @@ export default function Header() {
                 width={35}
               />
             </button>
-            <Link href="/PaymentDesktop">
+            <Link href="/CommandManagementDesktop">
               <Image
                 alt="cartRedIcon"
                 src={darkMode ? cartGreenIcon : cartRedIcon}

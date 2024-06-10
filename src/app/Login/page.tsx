@@ -87,7 +87,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <button type="submit">
+                  <button type="button" onClick={handleLogin}>
                     <Image alt="arrowIcon" src={arrowIcon} width={45} />
                   </button>
                 </div>
