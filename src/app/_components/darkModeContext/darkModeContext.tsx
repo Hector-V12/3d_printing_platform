@@ -14,9 +14,11 @@ interface DarkModeContextProps {
   toggleDarkMode: () => void;
 }
 
-const defaultDarkModeContext = false;
 // Create the context with default values
-const DarkModeContext = createContext<DarkModeContextProps | boolean>(false);
+const DarkModeContext = createContext<DarkModeContextProps>({
+  darkMode: false,
+  toggleDarkMode: () => { },
+});
 
 // Define the provider properties interface
 interface DarkModeProviderProps {
@@ -28,7 +30,7 @@ export const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
   const [darkMode, setDarkMode] = useState(false);
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevMode) => !prevMode);
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export const DarkModeProvider = ({ children }: DarkModeProviderProps) => {
 
 export const useDarkMode = () => {
   const context = useContext(DarkModeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useDarkMode must be used within a DarkModeProvider");
   }
   return context;

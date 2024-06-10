@@ -17,7 +17,7 @@ export default function AdminPannel() {
   const [inProgressOrders, setInProgressOrders] = useState<Order[]>([]);
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const { user } = useAuth();
 
   const [openCommands, setOpenCommands] = useState<number[]>([]); // Track open commands
@@ -118,7 +118,7 @@ export default function AdminPannel() {
                 <div key={order.id}>
                   <div className="flex flex-col space-y-4">
                     <div className="flex space-x-4">
-                      <button onClick={(e) => toggleOpenCommand(order.id)}>
+                      <button onClick={() => toggleOpenCommand(order.id)}>
                         <Image
                           alt="rightArrow"
                           src={

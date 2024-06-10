@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
@@ -19,7 +18,6 @@ import { useLanguage } from "./languageContext/languageContext";
 import { useAuth } from "./authContext/authContext";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
 
 export interface Notifications {
   id?: number;
@@ -76,16 +74,19 @@ export default function Header() {
       setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length);
     } else if (event.key === 'ArrowUp') {
       setSelectedIndex((prevIndex) => (prevIndex - 1 + searchResults.length) % searchResults.length);
-    } else if (event.key === 'Enter' && selectedIndex >= 0) {
-      handleResultClick(searchResults[selectedIndex].id);
+    } else if (event.key === 'Enter' && selectedIndex >= 0 && selectedIndex < searchResults.length) {
+      const selectedResult = searchResults[selectedIndex];
+      if (selectedResult) {
+        handleResultClick(selectedResult.id);
+      }
     }
   };
 
   const handleResultClick = (userId: string) => {
     setSearchText(''); // Clear the search bar
-    setSearchResults([]); // Clear the search results 
+    setSearchResults([]); // Clear the search results
     setSelectedIndex(-1);
-    window.location.href = '/CommandManagementDesktop';// Reset selected index
+    window.location.href = '/CommandManagementDesktop'; // Reset selected index
   };
 
   return (
@@ -101,14 +102,14 @@ export default function Header() {
             className="w-full py-2 px-4 rounded-full text-gray-800"
             value={searchText}
             onChange={handleSearch}
-            onKeyDown={handleKeyDown} // Add this line
+            onKeyDown={handleKeyDown}
           />
           {searchResults.length > 0 && (
             <ul className="absolute z-10 bg-white text-gray-800 w-full mt-1 rounded-lg shadow-lg">
               {searchResults.map((result, index) => (
                 <li
                   key={result.id}
-                  className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${index === selectedIndex ? 'bg-gray-300' : ''}`} // Highlight the selected result
+                  className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${index === selectedIndex ? 'bg-gray-300' : ''}`}
                   onClick={() => handleResultClick(result.id)}
                   onMouseEnter={() => handleMouseEnter(index)}
                 >
