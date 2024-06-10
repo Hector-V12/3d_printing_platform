@@ -115,7 +115,7 @@ export default function CommandManagementDesktop() {
           },
         },
       );
-
+      alert("Order created successfully");
       console.log("Order created successfully:", response.data);
       // Optionally, you can redirect the user to another page or show a success message
     } catch (error) {
@@ -127,7 +127,7 @@ export default function CommandManagementDesktop() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
       <Header />
       <form onSubmit={handleSubmit}>
         <div className="mt-10 flex w-full flex-row items-center">
@@ -232,7 +232,7 @@ export default function CommandManagementDesktop() {
                 <div>
                   <Link
                     className="font-bold text-fontBlack underline underline-offset-2"
-                    href="/AdviceDesktop"
+                    href="/"
                   >
                     Besoin d'aide avec la modélisation?
                   </Link>
@@ -277,7 +277,7 @@ export default function CommandManagementDesktop() {
                 <div className="center-items w-1/5 ">
                   <Link
                     className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
-                    href="/AdviceDesktop"
+                    href="/"
                   >
                     Besoin d'aide avec la modélisation?
                   </Link>

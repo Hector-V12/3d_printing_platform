@@ -28,7 +28,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
 
-      router.push("/AdviceDesktop");
+      router.push("/");
     } catch (error) {
       console.log(error);
       setError("Failed to login. Please check your credentials.");

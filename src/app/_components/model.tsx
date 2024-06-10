@@ -25,7 +25,7 @@ export const UrlModel: React.FC<ModelProps> = ({ fileUrl }) => {
 
 export const TractorModel: React.FC<ModelProps> = ({ fileUrl }) => {
     // Ensure the fileUrl is a valid URL or provide a default value
-    const validatedFileUrl = fileUrl || "/default-tractor.glb"; // Provide a default model path
+    const validatedFileUrl = fileUrl || "/cat.glb"; // Provide a default model path
 
     const myModel = useLoader(GLTFLoader, validatedFileUrl); // Use the fileUrl prop
     const modelRef = useRef<Mesh>(null);

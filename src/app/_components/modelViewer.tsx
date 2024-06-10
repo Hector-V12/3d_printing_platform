@@ -35,7 +35,7 @@ export const TractorModel: React.FC = ({ fileUrl }: any) => {
 };
 
 export const EthereumModel: React.FC = ({ fileUrl }: any) => {
-    const myModel = useLoader(GLTFLoader, "/ethereum-logo.glb");
+    const myModel = useLoader(GLTFLoader, "/eth.glb");
     const modelRef = useRef<Mesh>(null);
 
     useFrame((_state, delta) => {

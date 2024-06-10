@@ -20,6 +20,7 @@ import { Canvas } from "@react-three/fiber";
 import { Model, UrlModel } from "~/app/_components/model";
 import { OrbitControls } from "@react-three/drei";
 import { Mesh } from "three";
+import { Console } from "console";
 
 export interface Command {
   CommandTitle: string;
@@ -100,6 +101,7 @@ export default function CommandManagementDesktop({
       setMaterialChoice(order.materialChoice || "");
       setComment(order.comment || "");
       setFileUrl(order.fileUrl || "");
+      console.log(order.fileUrl)
 
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
@@ -139,7 +141,7 @@ export default function CommandManagementDesktop({
           },
         },
       );
-
+      alert("Order created successfully");
       console.log("Order created successfully:", response.data);
       // Optionally, you can redirect the user to another page or show a success message
     } catch (error) {
@@ -151,7 +153,7 @@ export default function CommandManagementDesktop({
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
       <Header />
       <form onSubmit={handleSubmit}>
         <div className="mt-10 flex w-full flex-row items-center">
@@ -256,7 +258,7 @@ export default function CommandManagementDesktop({
                 <div>
                   <Link
                     className="font-bold text-fontBlack underline underline-offset-2"
-                    href="/AdviceDesktop"
+                    href="/"
                   >
                     Besoin d'aide avec la modélisation?
                   </Link>
@@ -287,20 +289,18 @@ export default function CommandManagementDesktop({
           ) : (
             <div className="flex flex-col items-center">
               <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
-                <button className="flex h-5/6 flex-row items-center space-x-2">
-                  <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
-                    <Canvas style={{ height: "500px", width: "100%" }}>
-                      <OrbitControls />
-                      <mesh>
-                        <Model fileUrl={fileUrl} />
-                      </mesh>
-                    </Canvas>
-                  </div>
-                </button>
+                <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
+                  <div><Canvas style={{ height: "500px", width: "100%" }}>
+                    <OrbitControls />
+                    <mesh>
+                      <Model fileUrl={fileUrl} />
+                    </mesh>
+                  </Canvas></div>
+                </div>
                 <div className="center-items w-1/5 ">
                   <Link
                     className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
-                    href="/AdviceDesktop"
+                    href="/"
                   >
                     Besoin d'aide avec la modélisation?
                   </Link>

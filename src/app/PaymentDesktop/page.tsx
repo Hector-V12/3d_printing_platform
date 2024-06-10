@@ -40,7 +40,7 @@ export default function PaymentDesktop() {
   };
 
   return (
-    <div className="flex h-screen flex-col gap-10 bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex h-full flex-col gap-10 bg-gradient-to-t from-linear2 to-linear1">
       <Header />
       <div className="flex h-full  items-center justify-center">
         <div className="flex w-5/6  rounded-2xl bg-whiteBackground p-10">

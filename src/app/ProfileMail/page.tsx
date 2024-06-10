@@ -35,6 +35,7 @@ export default function ProfileMail() {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
+      alert("Email sent successfully");
       console.log(response.data);
     } catch (error) {
       console.error("Failed to send email:", error);

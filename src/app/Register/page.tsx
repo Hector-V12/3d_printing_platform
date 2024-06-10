@@ -43,7 +43,7 @@ export default function RegisterPage() {
     } catch (error: any) {
       setError(
         error.response?.data?.message ||
-          "An error occurred during registration",
+        "An error occurred during registration",
       );
       setSuccess("");
     }
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                   className="w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
                   type="submit"
                 >
-                  Register
+                  {translations.register}
                 </button>
               </div>
             </div>

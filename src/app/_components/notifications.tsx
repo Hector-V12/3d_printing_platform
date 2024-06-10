@@ -6,7 +6,6 @@ import Image from "next/image";
 import blackBellIcon from "../../public/blackBellIcon.svg";
 import axios from "axios";
 
-
 export interface Notifications {
   // Define the Notifications interface
   id: number;
@@ -53,21 +52,19 @@ export default function Notifications() {
   }
 
   return (
-    <div className="absolute right-0 top-12 z-10 mr-32 flex w-44 flex-col items-center justify-center rounded-xl bg-whiteBackground p-10 shadow-lg ">
+    <div className="absolute right-0 top-12 z-10 mr-32 flex w-60 flex-col items-center justify-center rounded-xl bg-whiteBackground p-5 shadow-lg">
       <div className="mb-5 font-extrabold text-fontBlack">Notifications</div>
-      <div>
+      <div className="h-64 w-full overflow-y-auto">
         {notificationsList.length > 0 ? (
           notificationsList.map((notification) => (
-            <div key={notification.id} className="flex items-center space-x-8">
-              <div className="flex space-x-2">
-                <div> Order:</div>
-                <div>{notification.notificationTitle}</div>
-              </div>
-              <div>{notification.content}</div>
+            <div key={notification.id} className="mb-4">
+              <div className="font-bold">{notification.notificationTitle}</div>
+              <div className="text-sm">{notification.content}</div>
+              <div className="text-xs text-gray-500">{new Date(notification.notificationDate).toLocaleString()}</div>
             </div>
           ))
         ) : (
-          <div>
+          <div className="flex flex-col items-center">
             <Image alt="blackBellIcon" src={blackBellIcon} />
             <div>Vous n'avez</div>
             <div>pas de Notifications</div>
@@ -76,7 +73,4 @@ export default function Notifications() {
       </div>
     </div>
   );
-}
-function setLoading(arg0: boolean) {
-  throw new Error("Function not implemented.");
 }

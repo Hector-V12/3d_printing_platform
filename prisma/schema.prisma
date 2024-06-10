@@ -22,10 +22,10 @@ model User {
   password    String
   name        String
   surname     String
-  isAdmin     Boolean @default(false)
+  isAdmin     Boolean? @default(false)
   phoneNumber String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
   orders      Order[]
   notificationsSent Notifications[]  @relation("sentNotifications")
   notificationsReceived Notifications[] @relation("receivedNotifications")

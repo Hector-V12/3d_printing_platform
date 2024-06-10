@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Model3D() {
     return (
-        <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
+        <div className=" flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
             <Header />
 
             <div className="flex h-full space-x-8">

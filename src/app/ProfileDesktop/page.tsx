@@ -91,7 +91,7 @@ export default function ProfileDesktop() {
   }
 
   return (
-    <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
+    <div className=" flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
       <div className="flex h-full items-center justify-center p-10">
         <div className="flex w-full max-w-6xl rounded-2xl border-green-400 bg-whiteBackground p-10 dark:border dark:bg-gray-900 dark:text-green-400">
@@ -190,25 +190,25 @@ export default function ProfileDesktop() {
                   <div className="border-l border-black p-2 dark:border-green-400">
                     {doneOrders?.length
                       ? doneOrders.map((order) => (
-                          <div
-                            key={order.id}
-                            className="flex items-center space-x-8"
-                          >
-                            <div className="flex space-x-2">
-                              <div> {translations.order}:</div>
-                              <div>{order.commandTitle}</div>
-                            </div>
-                            <div>
-                              {translations.quantity}: {order.quantity}
-                            </div>
-                            <Link
-                              className="rounded-lg bg-white p-2 dark:bg-green-400 dark:text-black"
-                              href={`/CommandManagementDesktop/${order.id}`}
-                            >
-                              {translations.orderAgain}
-                            </Link>
+                        <div
+                          key={order.id}
+                          className="flex items-center space-x-8"
+                        >
+                          <div className="flex space-x-2">
+                            <div> {translations.order}:</div>
+                            <div>{order.commandTitle}</div>
                           </div>
-                        ))
+                          <div>
+                            {translations.quantity}: {order.quantity}
+                          </div>
+                          <Link
+                            className="rounded-lg bg-white p-2 dark:bg-green-400 dark:text-black"
+                            href={`/CommandManagementDesktop/${order.id}`}
+                          >
+                            {translations.orderAgain}
+                          </Link>
+                        </div>
+                      ))
                       : false}
                   </div>
                 </div>
@@ -220,6 +220,16 @@ export default function ProfileDesktop() {
                 Logout
               </button>
             </div>
+            {user?.isAdmin && (
+              <div className="flex w-full justify-center mt-4">
+                <Link
+                  href="/AdminPanel"
+                  className="bg-green-500 text-white py-2 px-4 rounded-lg"
+                >
+                  Accéder à l'interface administrateur
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
