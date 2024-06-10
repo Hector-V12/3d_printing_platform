@@ -5,7 +5,7 @@ import authenticate from "../../../../../middleware/auth";
 
 const prisma = new PrismaClient();
 
-export async function POST(
+export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } },
 ) {
@@ -19,7 +19,7 @@ export async function POST(
     }
 
     const order = await prisma.order.findUnique({
-      where: { id: req.id },
+      where: { id: orderId },
     });
 
     if (!order) {

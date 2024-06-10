@@ -48,7 +48,7 @@ export default function CommandManagementDesktop({
   const [comment, setComment] = useState("");
   const [commands, setCommands] = useState<Command[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState("");
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
@@ -80,7 +80,7 @@ export default function CommandManagementDesktop({
         throw new Error("User token not found");
       }
 
-      const response = await axios.post(`/api/orders/${orderId}`, {
+      const response = await axios.get(`/api/user/orders/${orderId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -107,7 +107,7 @@ export default function CommandManagementDesktop({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setError("");
 
     try {
       const token = localStorage.getItem("userToken");

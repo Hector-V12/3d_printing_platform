@@ -93,7 +93,7 @@ export async function PUT(req: NextRequest) {
         usedSoftware,
         materialChoice,
         comment,
-        status: status || "done", // Use provided status or default to 'done'
+        status: "done", // Use provided status or default to 'done'
       },
       include: {
         user: true, // Include user information in the order query

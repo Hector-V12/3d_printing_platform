@@ -10,6 +10,7 @@ import userRedIcon from "../../public/userRedIcon.svg";
 import bellGreenIcon from "~/assets/greenBell.png";
 import cartGreenIcon from "~/assets/greenCartIcon.svg";
 import userGreenIcon from "~/assets/greenPersonIcon.svg";
+import logoGarage from "~/assets/Logo_Garage.svg";
 
 import DarkModeToggle from "./darkModeContext/darkModeToggle";
 import Link from "next/link";
@@ -93,7 +94,7 @@ export default function Header() {
     <div>
       <div className="flex flex-row  items-center border-green-400 bg-whiteBackground p-2 dark:border-b dark:bg-slate-900">
         <div className="flex w-1/6 space-x-8">
-          <Image alt={poweredIcon} src={poweredIcon} width={50} />
+          <Image alt={logoGarage} src={logoGarage} width={150} />
         </div>
         <div className="relative flex-grow mx-4">
           <input
