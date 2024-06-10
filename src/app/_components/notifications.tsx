@@ -17,7 +17,7 @@ export interface Notifications {
 }
 
 export default function Notifications() {
-  const [notificationsList, setNotificationsList] = useState<Notification[]>([]);
+  const [notificationsList, setNotificationsList] = useState<Notifications[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchNotificationsList = async () => {
