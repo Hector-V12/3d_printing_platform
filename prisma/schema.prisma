@@ -62,3 +62,11 @@ model Email {
   userEmail String?
   
 }
+
+model Model {
+  id Int  @id @default(autoincrement())
+  commandTitle    String   @default("default title")
+  usedSoftware    String
+  materialChoice  String?
+  path         String?
+}
