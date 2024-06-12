@@ -5,11 +5,11 @@ import Header from "../_components/header";
 import Footer from "../_components/footer";
 import Image from "next/image";
 
-import boxIcon from "~/assets/boxIcon.svg";
-import whiteCartIcon from "~/assets/cartWhiteIcon.svg";
-import arrowRightIcon from "~/assets/arrowRightIcon.svg";
-import eyeFillIcon from "~/assets/eyeFill.svg";
-import paypalIcon from "~/assets/paypalIcon.svg";
+import boxIcon from "../../../public/boxIcon.svg";
+import whiteCartIcon from "../../../public/cartWhiteIcon.svg";
+import arrowRightIcon from "../../../public/arrowRightIcon.svg";
+import eyeFillIcon from "../../../public/eyeFill.svg";
+import paypalIcon from "../../../public/paypalIcon.svg";
 
 export interface Payment {
   CardNumber: string;
@@ -40,7 +40,7 @@ export default function PaymentDesktop() {
   };
 
   return (
-    <div className="flex h-full flex-col gap-10 bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex h-screen flex-col gap-10 bg-gradient-to-t from-linear2 to-linear1">
       <Header />
       <div className="flex h-full  items-center justify-center">
         <div className="flex w-5/6  rounded-2xl bg-whiteBackground p-10">

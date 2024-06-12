@@ -1,26 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import Footer from "../../_components/footer";
 import Header from "../../_components/header";
-
-import icon3d from "~/assets/icon3d.svg";
-import boxIcon from "~/assets/boxIcon.svg";
-import personIcon from "~/assets/personIcon.svg";
-import whiteCartIcon from "~/assets/cartWhiteIcon.svg";
-import uploadIcon from "~/assets/uploadIcon.svg";
-import formatErrorIcon from "~/assets/formatErrorIcon.svg";
-import Notifications from "~/app/_components/notifications";
-import { prisma } from "../../../../lib/prisma";
+import icon3d from "../../../../public/icon3d.svg";
+import boxIcon from "../../../../public/boxIcon.svg";
+import personIcon from "../../../../public/personIcon.svg";
+import uploadIcon from "../../../../public/uploadIcon.svg";
+import formatErrorIcon from "../../../../public/formatErrorIcon.svg";
 import axios from "axios";
-import { EthereumModel } from "~/app/_components/modelViewer";
 import { Canvas } from "@react-three/fiber";
-import { Model, UrlModel } from "~/app/_components/model";
+import { Model } from "~/app/_components/model";
 import { OrbitControls } from "@react-three/drei";
-import { Mesh } from "three";
-import { Console } from "console";
+import BasketButton from "~/app/_components/basketButton";
+import IsLoading from "~/app/_components/isLoading";
 
 export interface Command {
   CommandTitle: string;
@@ -53,20 +48,13 @@ export default function CommandManagementDesktop({
   const [usedSoftware, setUsedSoftware] = useState("");
   const [materialChoice, setMaterialChoice] = useState("");
   const [comment, setComment] = useState("");
-  const [commands, setCommands] = useState<Command[]>([]);
+  const [fileUrl, setFileUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [fileUrl, setFileUrl] = useState("");
-
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState("");
-  const [order, setOrder] = useState<Order>();
-
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
   const { id } = params.id;
 
   const handleOrderAgainClick = (order: Order) => {
-    // Set form fields with the values from the selected order
     setCommandTitle(order.commandTitle || "");
     setQuantity(order.quantity.toString() || "");
     setUsedSoftware(order.usedSoftware || "");
@@ -101,8 +89,7 @@ export default function CommandManagementDesktop({
       setMaterialChoice(order.materialChoice || "");
       setComment(order.comment || "");
       setFileUrl(order.fileUrl || "");
-      console.log(order.fileUrl)
-
+      console.log(order.fileUrl);
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
         setError("Order not found.");
@@ -139,11 +126,15 @@ export default function CommandManagementDesktop({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       alert("Order created successfully");
+      setCommandTitle("");
+      setQuantity("");
+      setUsedSoftware("");
+      setMaterialChoice("");
+      setComment("");
       console.log("Order created successfully:", response.data);
-      // Optionally, you can redirect the user to another page or show a success message
     } catch (error) {
       console.error("Error creating order:", error);
       setError("Failed to create order. Please try again.");
@@ -152,14 +143,18 @@ export default function CommandManagementDesktop({
     }
   };
 
+  if (loading) {
+    return <IsLoading />;
+  }
+
   return (
-    <div className="flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex min-h-screen flex-col bg-gradient-to-t from-linear2 to-linear1">
       <Header />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex-grow">
         <div className="mt-10 flex w-full flex-row items-center">
           <div className="flex w-1/2 flex-col">
-            <div className=" mb-10 ml-10 mr-10  flex  w-full flex-row justify-center">
-              <div className="mt-8 flex w-auto flex-col rounded-xl bg-whiteBackground pb-10 pl-20 pr-20 pt-10">
+            <div className="mb-10 ml-10 mr-10 flex w-full flex-row justify-center">
+              <div className="mt-8 flex w-1/2 flex-col rounded-xl bg-whiteBackground pb-10 pl-20 pr-20 pt-10">
                 <div className="mb-5 flex items-center justify-center font-extrabold text-fontBlack">
                   Importer un fichier
                   <Image className="ml-2" alt="3dIcon" src={icon3d} />
@@ -188,7 +183,7 @@ export default function CommandManagementDesktop({
                   <div className="border-1 flex flex-row border-b border-fontBlack p-1">
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <input
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       placeholder={quantity}
                       name="Quantity"
                       value={quantity}
@@ -220,7 +215,7 @@ export default function CommandManagementDesktop({
                   <div className="border-1 flex flex-row space-x-2 border-b border-fontBlack p-1">
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <select
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       name="MaterialChoice"
                       value={materialChoice}
                       onChange={(e) => setMaterialChoice(e.target.value)}
@@ -237,7 +232,7 @@ export default function CommandManagementDesktop({
                   <div className="border-1 flex flex-row border-b border-fontBlack p-1">
                     <Image alt="personIcon" src={personIcon} width={25} />
                     <input
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       placeholder="remarque"
                       name="remarque"
                       value={comment}
@@ -245,16 +240,7 @@ export default function CommandManagementDesktop({
                     />
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  className=" mb-3 flex  flex-row items-center space-x-12 bg-fontBlack p-2"
-                >
-                  <Image alt="whiteCartIcon" src={whiteCartIcon} />
-                  <div className="font-extrabold text-fontWhite">
-                    Ajouter au panier
-                  </div>
-                </button>
-
+                <BasketButton text="Ajouter au panier" />
                 <div>
                   <Link
                     className="font-bold text-fontBlack underline underline-offset-2"
@@ -265,12 +251,11 @@ export default function CommandManagementDesktop({
                 </div>
               </div>
             </div>
-            <Footer />
           </div>
 
           {formatError ? (
-            <div className="mb-24 ml-24 mr-24 mt-24 flex h-full w-2/3 flex-col items-center justify-center rounded-xl bg-whiteBackground">
-              <button className="mb-5  flex flex-row items-center space-x-8">
+            <div className="mb-24 ml-24 mr-24 mt-24 flex h-full w-1/2 flex-col items-center justify-center rounded-xl bg-whiteBackground">
+              <button className="mb-5 flex flex-row items-center space-x-8">
                 <div className="text-5xl font-extrabold text-red-900 ">
                   Format Incorrect!
                 </div>
@@ -287,19 +272,21 @@ export default function CommandManagementDesktop({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center">
-              <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
-                <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
-                  <div><Canvas style={{ height: "500px", width: "100%" }}>
-                    <OrbitControls />
-                    <mesh>
-                      <Model fileUrl={fileUrl} />
-                    </mesh>
-                  </Canvas></div>
+            <div className="flex flex-col items-center w-1/2">
+              <div className="mb-24 ml-24 mr-24 mt-24 flex h-full w-2/4 flex-col items-center justify-center rounded-xl bg-whiteBackground">
+                <div className="flex flex-row items-center border-b-4 border-black">
+                  <div>
+                    <Canvas style={{ height: "500px", width: "100%" }}>
+                      <OrbitControls />
+                      <mesh>
+                        <Model fileUrl={fileUrl} />
+                      </mesh>
+                    </Canvas>
+                  </div>
                 </div>
-                <div className="center-items w-1/5 ">
+                <div className="center-items w-auto">
                   <Link
-                    className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
+                    className="center-items flex justify-center text-lg font-extrabold text-fontBlack underline underline-offset-2 my-3"
                     href="/"
                   >
                     Besoin d'aide avec la modélisation?
@@ -310,6 +297,7 @@ export default function CommandManagementDesktop({
           )}
         </div>
       </form>
+      <Footer />
     </div>
   );
 }

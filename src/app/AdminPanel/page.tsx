@@ -9,8 +9,8 @@ import Header from "../_components/header";
 import Footer from "../_components/footer";
 import Email from "next-auth/providers/email";
 import Image from "next/image";
-import rightArrow from "~/assets/arrowRightIcon.svg";
-import downArrow from "~/assets/downArrow.svg";
+import rightArrow from "../../../public/arrowRightIcon.svg";
+import downArrow from "../../../public/downArrow.svg";
 
 export default function AdminPannel() {
   const router = useRouter();
@@ -146,7 +146,7 @@ export default function AdminPannel() {
                               className="text-red-700 underline"
                               onClick={() => updateOrder(order)}
                             >
-                              Terminer
+                              Terminé
                             </button>
                           </div>
                         </div>
@@ -222,7 +222,7 @@ export default function AdminPannel() {
                             </div>
                             <div>
                               <div className="text-green-500 underline">
-                                Terminer
+                                Terminé
                               </div>
                             </div>
                           </div>

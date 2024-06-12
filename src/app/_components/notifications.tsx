@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-import blackBellIcon from "../../public/blackBellIcon.svg";
+import blackBellIcon from "../../../public/blackBellIcon.svg";
 import axios from "axios";
+import IsLoading from "./isLoading";
 
 export interface Notifications {
   // Define the Notifications interface
@@ -48,7 +49,7 @@ export default function Notifications() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <IsLoading />;
   }
 
   return (

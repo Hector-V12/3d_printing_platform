@@ -3,18 +3,14 @@
 import React from "react";
 import { useDarkMode } from "./darkModeContext";
 import { useLanguage } from "../languageContext/languageContext";
+import CustomButton from "../button";
 
 const DarkModeToggle = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
   const { translations } = useLanguage();
 
   return (
-    <button
-      onClick={toggleDarkMode}
-      className="rounded bg-gray-200 p-2 dark:bg-green-400 dark:text-black"
-    >
-      {darkMode ? translations.lightMode : translations.darkMode}
-    </button>
+    <CustomButton text={darkMode ? translations.lightMode : translations.darkMode} OnClick={toggleDarkMode} />
   );
 };
 

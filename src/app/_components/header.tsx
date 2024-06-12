@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Notifications from "./notifications";
 
-import poweredIcon from "../../public/poweredIcon.svg";
-import bellRedIcon from "../../public/bellRedIcon.svg";
-import cartRedIcon from "../../public/cartRedIcon.svg";
-import userRedIcon from "../../public/userRedIcon.svg";
-import bellGreenIcon from "~/assets/greenBell.png";
-import cartGreenIcon from "~/assets/greenCartIcon.svg";
-import userGreenIcon from "~/assets/greenPersonIcon.svg";
-import logoGarage from "~/assets/Logo_Garage.svg";
+import poweredIcon from "../../../public/poweredIcon.svg";
+import bellRedIcon from "../../../public/bellRedIcon.svg";
+import cartRedIcon from "../../../public/cartRedIcon.svg";
+import userRedIcon from "../../../public/userRedIcon.svg";
+import bellGreenIcon from "../../../public/greenBell.png";
+import cartGreenIcon from "../../../public/greenCartIcon.svg";
+import userGreenIcon from "../../../public/greenPersonIcon.svg";
+import logoGarage from "../../../public/Logo_Garage.svg";
 
 import DarkModeToggle from "./darkModeContext/darkModeToggle";
 import Link from "next/link";
@@ -100,7 +100,7 @@ export default function Header() {
         <div className="relative flex-grow mx-4">
           <input
             type="text"
-            placeholder="Search here..."
+            placeholder={translations.search}
             className="w-full py-2 px-4 rounded-full text-gray-800"
             value={searchText}
             onChange={handleSearch}

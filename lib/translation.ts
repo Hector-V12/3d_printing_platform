@@ -37,6 +37,16 @@ export interface Translation {
   darkMode: string;
   lightMode: string;
   disconnect: string;
+  placeholderEmail: string;
+  placeholderPassword: string;
+  placeholderName: string;
+  placeholderSurname: string;
+  placeholderPhone: string;
+  alreadyHaveAccount: string;
+  notHaveAccount: string;
+  search: string;
+  titleAdvice: string;
+  contentAdvice: string;
 }
 
 export type Language = "en" | "fr" | "es" | "zh";

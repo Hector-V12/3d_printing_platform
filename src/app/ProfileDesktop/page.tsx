@@ -6,13 +6,13 @@ import Header from "../_components/header";
 import Image from "next/image";
 import DarkModeToggle from "../_components/darkModeContext/darkModeToggle";
 
-import currentCommands from "~/assets/currentCommandsIcon.svg";
-import myAccount from "~/assets/myAccountIcon.svg";
-import userIcon from "~/assets/userIcon.svg";
-import timeIcon from "~/assets/timeIcon.svg";
-import poweredIcon from "~/assets/poweredWholeIcon.svg";
-import greenProfileIcon from "~/assets/greenProfileIcon.svg";
-import greenTimeIcon from "~/assets/greenTimeIcon.svg";
+import currentCommands from "../../../public/currentCommandsIcon.svg";
+import myAccount from "../../../public/myAccountIcon.svg";
+import userIcon from "../../../public/userIcon.svg";
+import timeIcon from "../../../public/timeIcon.svg";
+import poweredIcon from "../../../public/poweredWholeIcon.svg";
+import greenProfileIcon from "../../../public/greenProfileIcon.svg";
+import greenTimeIcon from "../../../public/greenTimeIcon.svg";
 
 import { useDarkMode } from "../_components/darkModeContext/darkModeContext";
 import { useLanguage } from "../_components/languageContext/languageContext";
@@ -20,6 +20,9 @@ import { useAuth } from "../_components/authContext/authContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import IsLoading from "../_components/isLoading";
+import CustomButton from "../_components/button";
+import LogoutButton from "../_components/logoutButton";
 
 interface Order {
   id?: number;
@@ -87,11 +90,11 @@ export default function ProfileDesktop() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <IsLoading />;
   }
 
   return (
-    <div className=" flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
+    <div className=" flex h-screen w-full flex-col bg-gradient-to-t from-linear2 to-linear1 dark:bg-gradient-to-t dark:from-gray-900 dark:to-almostBlackGreen">
       <Header />
       <div className="flex h-full items-center justify-center p-10">
         <div className="flex w-full max-w-6xl rounded-2xl border-green-400 bg-whiteBackground p-10 dark:border dark:bg-gray-900 dark:text-green-400">
@@ -99,35 +102,38 @@ export default function ProfileDesktop() {
             <div className="text-3xl font-extrabold">
               Mes Commandes en cours
             </div>
-            <div className="flex flex-col items-center text-2xl font-extrabold">
+            <div className="flex flex-col items-start text-2xl font-extrabold">
               {inProgressOrders?.length ? (
                 inProgressOrders.map((order) => (
                   <div key={order.id} className="flex space-x-8">
                     <div className="flex space-x-2">
-                      <div> Order:</div>
+                      <div>Order:</div>
                       <div>{order.commandTitle}</div>
                     </div>
                     <div>Quantity: {order.quantity}</div>
                   </div>
                 ))
               ) : (
-                <div>
-                  <div>Vous n'avez</div>
-                  <div>pas encore effectué</div>
-                  <div>de commande</div>
+                <div className="flex flex-col items-start">
+                  <p>Vous n'avez pas encore effectué de commande</p>
                 </div>
               )}
             </div>
 
             <div className="h-1/3">
               <Link
-                className="text-xl font-bold text-black underline dark:text-green-400"
+                className="flex flex-row text-xl font-bold text-black underline dark:text-green-400"
                 href="/ProfileMail"
               >
                 Envoyer un Mail à Garage Isep
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 ml-3">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                </svg>
+
               </Link>
             </div>
           </div>
+
 
           <div className="mx-8 w-px bg-black dark:bg-green-400"></div>
 
@@ -201,11 +207,12 @@ export default function ProfileDesktop() {
                           <div>
                             {translations.quantity}: {order.quantity}
                           </div>
+
                           <Link
-                            className="rounded-lg bg-white p-2 dark:bg-green-400 dark:text-black"
+                            className="rounded-lg p-2 dark:text-black"
                             href={`/CommandManagementDesktop/${order.id}`}
                           >
-                            {translations.orderAgain}
+                            <CustomButton text={translations.orderAgain} />
                           </Link>
                         </div>
                       ))
@@ -216,17 +223,15 @@ export default function ProfileDesktop() {
             </div>
             <div className="flex w-full justify-between pl-10 pr-10">
               <DarkModeToggle />
-              <button className="dark:text-green-400" onClick={logout}>
-                Logout
-              </button>
+              <LogoutButton text="Logout" OnClick={logout} />
             </div>
             {user?.isAdmin && (
               <div className="flex w-full justify-center mt-4">
                 <Link
                   href="/AdminPanel"
-                  className="bg-green-500 text-white py-2 px-4 rounded-lg"
+                  className=" py-2 px-4 rounded-lg"
                 >
-                  Accéder à l'interface administrateur
+                  <CustomButton text="Accéder à l'interface administrateur" />
                 </Link>
               </div>
             )}
@@ -234,6 +239,6 @@ export default function ProfileDesktop() {
         </div>
       </div>
       <Footer />
-    </div>
+    </div >
   );
 }

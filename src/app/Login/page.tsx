@@ -6,11 +6,11 @@ import { useLanguage } from "../_components/languageContext/languageContext";
 import { useAuth } from "../_components/authContext/authContext";
 import axios from "axios";
 import Footer from "../_components/footer";
-import userIcon from "~/assets/userIcon.svg";
-import doorIcon from "~/assets/doorIcon.svg";
-import moodleConnexionIcon from "~/assets/MoodleConnexionIcon.svg";
+import userIcon from "../../../public/userIcon.svg";
+import doorIcon from "../../../public/doorIcon.svg";
+import moodleConnexionIcon from "../../../public/MoodleConnexionIcon.svg";
 
-import arrowIcon from "~/assets/arrowRedIcon.svg";
+import arrowIcon from "../../../public/arrowRedIcon.svg";
 import Image from "next/image";
 
 import SplineViewerComponent from "~/app/_components/spline";
@@ -36,9 +36,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col  justify-center bg-gradient-to-t from-linear2 to-linear1 dark:bg-gray-900 dark:text-white">
+    <div className="flex h-screen w-full flex-col justify-center bg-gradient-to-t from-linear2 to-linear1 dark:bg-gray-900 dark:text-white">
       <div className="flex h-full w-full flex-col items-center justify-center space-y-6 p-14">
-        <div className="flex items-center justify-around">
+        <div className="flex justify-around w-full max-w-6xl">
           <div className="w-full">
             <SplineViewerComponent />
           </div>
@@ -47,9 +47,6 @@ export default function LoginPage() {
               <h1 className="mb-2 text-center text-3xl font-bold">
                 {translations.connexion}
               </h1>
-              <h2 className="mb-6 text-center text-xl font-light text-gray-500">
-                Moodle
-              </h2>
             </div>
 
             <form onSubmit={handleLogin}>
@@ -61,10 +58,12 @@ export default function LoginPage() {
                   {translations.mailIsep}
                 </label>
                 <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack bg-whiteBackground p-2">
-                  <Image alt="userIcon" src={userIcon} width={35} />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+                  </svg>
                   <input
                     className="border-0 bg-whiteBackground text-black outline-none"
-                    placeholder="Insérez votre Identifiant"
+                    placeholder={translations.placeholderEmail}
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -79,11 +78,13 @@ export default function LoginPage() {
                   {translations.password}
                 </label>
                 <div className="border-1 flex flex-row space-x-4 border-b border-fontBlack bg-whiteBackground p-2">
-                  <Image alt="doorIcon" src={doorIcon} width={35} />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  </svg>
                   <input
                     type="password"
                     className="bg-whiteBackground text-black outline-none"
-                    placeholder="Insérez votre mot de passe"
+                    placeholder={translations.placeholderPassword}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -96,7 +97,7 @@ export default function LoginPage() {
                     className="font-bold text-black underline"
                     href="/Register"
                   >
-                    Vous n'êtes pas encore inscrit?
+                    {translations.notHaveAccount}
                   </Link>
                 </div>
               </div>

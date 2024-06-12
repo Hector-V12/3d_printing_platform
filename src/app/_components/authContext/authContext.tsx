@@ -28,6 +28,7 @@ export interface Order {
 interface AuthContextType {
   user: UserData | null;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string, surname: string, phoneNumber: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -65,6 +66,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const register = async (email: string, password: string, name: string, surname: string, phoneNumber: string) => {
+    try {
+      const response = await axios.post("/api/auth/register", { email, password, name, surname, phoneNumber });
+      const token = response.data.token;
+      localStorage.setItem("userToken", token);
+      const userData = await fetchUserData(token);
+      setUser(userData);
+      router.push("/");
+    } catch (error) {
+      throw new Error("Failed to register");
+    }
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("userToken");
@@ -90,6 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     user,
     login,
+    register,
     logout,
   };
 

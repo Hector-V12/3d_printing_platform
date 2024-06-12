@@ -1,10 +1,29 @@
 {
+  "placeholderEmail": "Enter your email address",
+  "placeholderPassword": "Enter your password",
+  "placeholderName": "Enter your name",
+  "placeholderSurname": "Enter your surname",
+  "placeholderPhone": "Enter your phone number",
+  "alreadyHaveAccount": "Already registered? Log in here",
+  "notHaveAccount": "Not registered yet? Register here",
+  "search": "Search for a 3D print",
+  "titleAdvice": "Best practices for 3D modeling...",
+  "contentAdvice": [
+    "Part size: maximum 240 * 240 * 240 mm",
+    "Format: .3mf, .stl or STEP (.step, .stp)",
+    "",
+    "Avoid supports as much as possible:",
+    "Part of your hanging piece may need support. Make sure one side of your model provides the largest possible contact surface with the print surface.",
+    "",
+    "One piece per file:",
+    "If you send us a file, it must contain only one piece. If a file contains a boat, the mast must be part of the hull model. The only accepted case of multiple pieces in one file: print-in-place. If this term means nothing to you, one piece per file."
+  ],
   "surname": "surname",
   "name": "name",
   "register": "Register",
   "userName": "Username",
   "password": "Password",
-  "connexion": "Connexion",
+  "connexion": "Connection",
   "mailIsep": "Email Address",
   "phoneNumber": "Phone Number",
   "orderHistory": "Order History",
@@ -34,6 +53,6 @@
   "adress": "Address",
   "city": "City",
   "commandRecap": "Order Recap",
-  "ou": "or",
+  "ou": "Or",
   "notification": "Receive Your Notifications Here"
 }

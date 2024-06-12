@@ -1,6 +1,26 @@
 {
-  "surname": "",
-  "register": "",
+  "placeholderEmail": "Introduzca su dirección de correo electrónico",
+  "placeholderPassword": "Introduzca su contraseña",
+  "placeholderName": "Introduzca su nombre",
+  "placeholderSurname": "Introduzca su apellido",
+  "placeholderPhone": "Introduzca su número de teléfono",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta? Conéctate aquí",
+  "notHaveAccount": "¿No tienes una cuenta? Regístrate aquí",
+  "search": "Buscar una impresión 3D",
+  "titleAdvice": "Buenas prácticas para la modelización 3D...",
+  "contentAdvice": [
+    "Tamaño de la pieza: máximo 240 * 240 * 240 mm",
+    "Formato: .3mf, .stl o STEP (.step, .stp)",
+    "",
+    "Evitar los soportes tanto como sea posible:",
+    "Parte de su pieza colgante puede necesitar soporte. Asegúrese de que un lado de su modelo proporcione la mayor superficie de contacto posible con la superficie de impresión.",
+    "",
+    "Una sola pieza por archivo:",
+    "Si nos envía un archivo, debe contener solo una pieza. Si un archivo contiene un barco, el mástil debe formar parte del modelo del casco. El único caso aceptado de múltiples piezas en un solo archivo: print-in-place. Si este término no le dice nada, una pieza por archivo."
+  ],
+  "surname": "Apellido",
+  "name": "Nombre",
+  "register": "Registro",
   "userName": "Nombre de usuario",
   "password": "Contraseña",
   "connexion": "Conexión",
@@ -30,6 +50,6 @@
   "adress": "Dirección",
   "city": "Ciudad",
   "commandRecap": "Resumen del Pedido",
-  "ou": "o",
+  "ou": "O",
   "notification": "Reciba Sus Notificaciones Aquí"
 }

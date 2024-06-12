@@ -1,20 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import Footer from "../_components/footer";
 import Header from "../_components/header";
-
-import icon3d from "../../public/icon3d.svg";
-import boxIcon from "../../public/boxIcon.svg";
-import personIcon from "../../public/personIcon.svg";
-import whiteCartIcon from "../../public/cartWhiteIcon.svg";
-import uploadIcon from "../../public/uploadIcon.svg";
-import formatErrorIcon from "../../public/formatErrorIcon.svg";
-import Notifications from "../_components/notifications";
-import { prisma } from "../../../lib/prisma";
+import icon3d from "../../../public/icon3d.svg";
+import boxIcon from "../../../public/boxIcon.svg";
+import personIcon from "../../../public/personIcon.svg";
+import uploadIcon from "../../../public/uploadIcon.svg";
+import formatErrorIcon from "../../../public/formatErrorIcon.svg";
 import axios from "axios";
+import BasketButton from "../_components/basketButton";
+import IsLoading from "../_components/isLoading";
 
 export interface Command {
   CommandTitle: string;
@@ -53,7 +51,6 @@ export default function CommandManagementDesktop() {
   const [doneOrders, setDoneOrders] = useState<Order[]>([]);
 
   const handleOrderAgainClick = (order: Order) => {
-    // Set form fields with the values from the selected order
     setCommandTitle(order.commandTitle);
     setQuantity(order.quantity.toString());
     setUsedSoftware(order.usedSoftware);
@@ -113,11 +110,15 @@ export default function CommandManagementDesktop() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       alert("Order created successfully");
+      setCommandTitle("");
+      setQuantity("");
+      setUsedSoftware("");
+      setMaterialChoice("");
+      setComment("");
       console.log("Order created successfully:", response.data);
-      // Optionally, you can redirect the user to another page or show a success message
     } catch (error) {
       console.error("Error creating order:", error);
       setError("Failed to create order. Please try again.");
@@ -126,13 +127,17 @@ export default function CommandManagementDesktop() {
     }
   };
 
+  if (loading) {
+    return <IsLoading />;
+  }
+
   return (
-    <div className="flex h-full w-full flex-col bg-gradient-to-t from-linear2 to-linear1">
+    <div className="flex min-h-screen flex-col bg-gradient-to-t from-linear2 to-linear1">
       <Header />
-      <form onSubmit={handleSubmit}>
-        <div className="mt-10 flex w-full flex-row items-center">
+      <form onSubmit={handleSubmit} className="flex-grow">
+        <div className="mt-10 flex h-full w-full flex-row items-center">
           <div className="flex w-1/2 flex-col">
-            <div className=" mb-10 ml-10 mr-10  flex  w-full flex-row justify-center">
+            <div className="mb-10 ml-10 mr-10 flex w-full flex-row justify-center">
               <div className="mt-8 flex w-auto flex-col rounded-xl bg-whiteBackground pb-10 pl-20 pr-20 pt-10">
                 <div className="mb-5 flex items-center justify-center font-extrabold text-fontBlack">
                   Importer un fichier
@@ -162,7 +167,7 @@ export default function CommandManagementDesktop() {
                   <div className="border-1 flex flex-row border-b border-fontBlack p-1">
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <input
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       placeholder="0"
                       name="Quantity"
                       value={quantity}
@@ -194,7 +199,7 @@ export default function CommandManagementDesktop() {
                   <div className="border-1 flex flex-row space-x-2 border-b border-fontBlack p-1">
                     <Image alt="boxIcon" src={boxIcon} width={25} />
                     <select
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       name="MaterialChoice"
                       value={materialChoice}
                       onChange={(e) => setMaterialChoice(e.target.value)}
@@ -211,7 +216,7 @@ export default function CommandManagementDesktop() {
                   <div className="border-1 flex flex-row border-b border-fontBlack p-1">
                     <Image alt="personIcon" src={personIcon} width={25} />
                     <input
-                      className="w-full  bg-whiteBackground text-fontBlack outline-none"
+                      className="w-full bg-whiteBackground text-fontBlack outline-none"
                       placeholder="remarque"
                       name="remarque"
                       value={comment}
@@ -219,16 +224,7 @@ export default function CommandManagementDesktop() {
                     />
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  className=" mb-3 flex  flex-row items-center space-x-12 bg-fontBlack p-2"
-                >
-                  <Image alt="whiteCartIcon" src={whiteCartIcon} />
-                  <div className="font-extrabold text-fontWhite">
-                    Ajouter au panier
-                  </div>
-                </button>
-
+                <BasketButton text="Ajouter au panier" />
                 <div>
                   <Link
                     className="font-bold text-fontBlack underline underline-offset-2"
@@ -239,12 +235,11 @@ export default function CommandManagementDesktop() {
                 </div>
               </div>
             </div>
-            <Footer />
           </div>
 
           {formatError ? (
             <div className="mb-24 ml-24 mr-24 mt-24 flex h-full w-2/3 flex-col items-center justify-center rounded-xl bg-whiteBackground">
-              <button className="mb-5  flex flex-row items-center space-x-8">
+              <button className="mb-5 flex flex-row items-center space-x-8">
                 <div className="text-5xl font-extrabold text-red-900 ">
                   Format Incorrect!
                 </div>
@@ -261,22 +256,27 @@ export default function CommandManagementDesktop() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center">
-              <div className="mb-24 ml-24 mr-24 mt-24 flex  h-full w-2/3  flex-col items-center justify-center rounded-xl bg-whiteBackground">
-                <button className="flex h-5/6 flex-row items-center space-x-2">
-                  <div className=" flex  flex-row items-center space-x-2 border-b-4 border-black ">
+            <div className="flex flex-col items-center w-1/2">
+              <div className="mb-24 ml-24 mr-24 mt-24 flex p-3 h-full w-2/3 flex-col items-center justify-center rounded-xl bg-whiteBackground">
+                <div className="flex h-5/6 flex-row items-center space-x-2 border-b-4 border-black">
+                  <div className="flex flex-row items-center space-x-2">
                     <Image alt="uploadIcon" src={uploadIcon} />
                     <input type="file" />
-                    <button className="text-4xl font-extrabold ">
+                    <button className="text-2xl font-extrabold text-fontBlack">
                       {uploadStatus && <p>{uploadStatus}</p>}
-                      Importer un fichier 3d
+                      Importer un fichier
                     </button>
                   </div>
-                  <Image alt="3dIcon" src={icon3d} width={95} />
-                </button>
-                <div className="center-items w-1/5 ">
+                  <Image
+                    alt="3dIcon"
+                    src={icon3d}
+                    width={95}
+                    className="mb-4"
+                  />
+                </div>
+                <div className="center-items w-auto">
                   <Link
-                    className="center-items flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
+                    className="center-items my-3 flex justify-center text-xl font-extrabold text-fontBlack underline underline-offset-2"
                     href="/"
                   >
                     Besoin d'aide avec la modélisation?
@@ -287,6 +287,7 @@ export default function CommandManagementDesktop() {
           )}
         </div>
       </form>
+      <Footer />
     </div>
   );
 }
